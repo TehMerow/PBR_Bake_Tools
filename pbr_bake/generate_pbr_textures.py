@@ -1,5 +1,5 @@
 bl_info = {
-    "name"    : "Prepare PBR Bake",
+    "name"    : "PBR Bake Tools",
     "blender" : (2,90,1),
     "version" : (1,0),
     "category": "Material",
