@@ -1,6 +1,6 @@
-# PBR Nodes
 
-A Blender addon that aids in the creation of PBR Texture baking
+
+# A Blender addon that aids in the creation of PBR Texture baking
 
 # Features
 - Create PBR textures on the fly with one button
