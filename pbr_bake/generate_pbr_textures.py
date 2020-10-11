@@ -16,6 +16,7 @@ from bpy.utils import (
     unregister_class
 )
 from bpy.app.handlers import persistent
+from bpy.types import AddonPreferences
 
 bl_info = {
     "name"    : "Prepare PBR Bake",
@@ -644,10 +645,6 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
             operator = "node.bake_current_texture",
             text = "Bake Clearcoat"
         ).bake_slot = "clearcoat"
-        # box2.operator(
-        #     operator = "node.bake_current_texture",
-        #     text = "Bake Clear Rough"
-        # ).bake_slot = "clear_rough"
         box2.operator(
             operator = "node.bake_current_texture",
             text = "Bake Emission"
@@ -662,7 +659,9 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
         ).bake_slot = "normal"
 
 
-
+"""
+Tuple for registering classes
+"""
 registration_classes = (
     SetupBakingScene,
     CreateBasicMaterialTextures,
@@ -676,16 +675,11 @@ registration_classes = (
     NODE_PT_PBR_Bake_Bake,
 )
 
-def init_properties():
-    # scene = bpy.data.scenes['Scene']
-    # scene["pbr_bake_image_tile_size"] = 256
-    # scene["pbr_bake_image_size"] = 1024
-    pass
+def init_props():
+    
+    # Scene props for Addon
 
-def register():
-    for cls in registration_classes:
-        register_class(cls)
-
+    # Scene prop for tile size
     bpy.types.Scene.pbr_bake_image_tile_size = bpy.props.IntProperty(
         name="pbr_bake_image_tile_size",
         min=1,
@@ -693,13 +687,11 @@ def register():
         default = 256,
         description = "The render tile size,"
     )
-    bpy.types.Scene.pbr_bake_image_size = bpy.props.IntProperty(
-        name="pbr_bake_image_tile_size",
-        min=64,
-        max=2048,
-        default = 1024
-    )
 
+# Registration function
+def register():
+    for cls in registration_classes:
+        register_class(cls)
 
 def unregister():
     for cls in registration_classes:
