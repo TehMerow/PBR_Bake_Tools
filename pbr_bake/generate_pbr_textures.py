@@ -1,16 +1,21 @@
+bl_info = {
+    "name"    : "Prepare PBR Bake",
+    "blender" : (2,90,1),
+    "version" : (1,0),
+    "category": "Material",
+    "author" : "Merow",
+    "website" : "https://github.com/TehMerow/PBR_Bake_Tools",
+    "location" : "Node Editor > Properties Panel",
+    "description" : "Aids in PBR Texture baking"
+}
+
 import bpy
-
-from bpy.types import (
-    Header,
-    Menu
-
-)
 
 from bpy.utils import (
     register_class,
     unregister_class
 )
-
+from bpy.app.handlers import persistent
 
 bl_info = {
     "name"    : "Prepare PBR Bake",
@@ -155,8 +160,7 @@ def link_slot(ctx, slot_name):
 
 
 
-import bpy
-
+@persistent
 def create_the_stuff():
     pbr_bake_group = bpy.data.node_groups.new("PBR_Bake", "ShaderNodeTree")
     pbr_bake_group.name = "PBR_Bake"
@@ -383,6 +387,7 @@ class SetupBakingScene(bpy.types.Operator):
         scene.render.bake.use_selected_to_active = self.selected_to_active
         scene.render.bake.cage_extrusion = 0.1
         scene.render.bake.margin = 8
+
         return {"FINISHED"}
 
 
@@ -491,6 +496,9 @@ class AddPbrBakeNode(bpy.types.Operator):
         return context
 
     def execute(self, context):
+        if bpy.data.node_groups.find("PBR_Bake") == -1:
+            create_the_stuff()
+
         mat = context.active_object.material_slots[0].material
         tree = mat.node_tree
 
@@ -540,17 +548,22 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
         layout = self.layout
 
         box = layout.box()
-        box.label(text="setup")  
+        box.label(text="Scene Setup")  
 
         tile_size = box.prop(
             bpy.data.scenes['Scene'],
-            '["pbr_bake_image_tile_size"]',
+            'pbr_bake_image_tile_size',
+            text="Tile Size"
+        )
+        box.prop(
+            context.scene,
+            'pbr_bake_image_tile_size',
             text="Tile Size"
         )
         box.operator(
             operator="scene.setup_baking_scene", 
             text="Setup Baking Scene"
-        ).image_size = context.scene['pbr_bake_image_tile_size']
+        ).image_size = context.scene.pbr_bake_image_tile_size
 
         box.operator(
             operator = "scene.reset_bake_settings",
@@ -570,19 +583,19 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
 
         box.label(text="Texture Creators")
         box.prop(
-            bpy.data.scenes['Scene'],
-            '["pbr_bake_image_size"]',
+            context.scene,
+            'pbr_bake_image_size',
             text="Texture Size"
         )
         box.operator(
             operator = "scene.create_basic_pbr_textures",
             text = "Create PBR Textures Full"
-        ).image_size = context.scene['pbr_bake_image_size']
+        ).image_size = context.scene.pbr_bake_image_size
 
         box.operator(
             operator = "scene.create_orm_pbr_textures",
             text = "Create PBR Textures ORM"
-        ).image_size = context.scene['pbr_bake_image_size']
+        ).image_size = context.scene.pbr_bake_image_size
 
         box.operator(
             operator = "node.add_bake_node",
@@ -654,6 +667,7 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
         ).bake_slot = "normal"
 
 
+
 registration_classes = (
     SetupBakingScene,
     CreateBasicMaterialTextures,
@@ -667,12 +681,29 @@ registration_classes = (
     NODE_PT_PBR_Bake_Bake,
 )
 
+def init_properties():
+    # scene = bpy.data.scenes['Scene']
+    # scene["pbr_bake_image_tile_size"] = 256
+    # scene["pbr_bake_image_size"] = 1024
+    pass
+
 def register():
-    bpy.context.scene["pbr_bake_image_tile_size"] = 256
-    bpy.context.scene["pbr_bake_image_size"] = 1024
-    create_the_stuff()
     for cls in registration_classes:
         register_class(cls)
+
+    bpy.types.Scene.pbr_bake_image_tile_size = bpy.props.IntProperty(
+        name="pbr_bake_image_tile_size",
+        min=1,
+        max=1024,
+        default = 256,
+        description = "The render tile size,"
+    )
+    bpy.types.Scene.pbr_bake_image_size = bpy.props.IntProperty(
+        name="pbr_bake_image_tile_size",
+        min=64,
+        max=2048,
+        default = 1024
+    )
 
 
 def unregister():
