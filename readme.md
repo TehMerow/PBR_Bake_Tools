@@ -28,7 +28,7 @@ A Blender addon that aids in the creation of PBR Texture baking
 
 - This isn't a one button solution but it's something I needed to speed up the process quite a bit
 - right now this only works with **one material per object** if you need more materials per object I'd recommend masking with vertex colors and have multiple shaders withing the material
-- This doesn't cover things like shadow and combined baking but that process is already availiable in blender as is
+- This doesn't cover things like shadow and combined baking but that process is already available in blender as is
 
-The better souliton than this would be to use proper texture baking software like armorpaint but my computer can't handle those so this is my solution lol
+The better solution than this would be to use proper texture baking software like armorpaint but my computer can't handle those so this is my solution lol
 
