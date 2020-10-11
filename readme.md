@@ -24,6 +24,8 @@
 - Finally select the texture you want to bake in the node editor and click on the corrosponding button in the PBR Bake tab. 
 - Continue with all textures until complete
 
+[Full tutorial can be found here](https://github.com/TehMerow/PBR_Bake_Tools/wiki/Tutorial)
+
 # Gotchas
 
 - This isn't a one button solution but it's something I needed to speed up the process quite a bit
