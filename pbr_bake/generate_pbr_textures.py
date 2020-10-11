@@ -45,6 +45,11 @@ image_names_orm = [
 
 
 def create_image_texture(name, size, context):
+    """
+        Creates an image texture
+        names the image texture
+        stores it into memory
+    """
     active_mat = context.active_object.active_material.name  
     mat_name = active_mat + "-" + name
     
@@ -57,15 +62,25 @@ def create_image_texture(name, size, context):
         generated_type="BLANK",
     )
 
+
+# Creates Image textures based on the image_names_full list
+# used for creating default pbr layout
 def create_image_textures_default(size, context):
     for name in image_names_full:
         create_image_texture(name, size, context)
 
     
-
+# Creates Image textures based on the image_names_full list
+# used for creating ORM pbr layout
 def create_image_textures_orm(size, context):
     for name in image_names_orm:
         create_image_texture(name, size, context)
+
+
+# creates image texture node
+# sets the name of the node
+# sets the position of the name
+# sets the image of the node
 
 
 def create_texture_node(image, name, position, context):
@@ -75,6 +90,8 @@ def create_texture_node(image, name, position, context):
     texture_node.image = image
  
 
+# Helper for rordering the texture images 
+# so the follow the same order of the pbr slots
 def reorder_images(context, pbr_type):
 
     op_images = list()
@@ -100,6 +117,12 @@ def reorder_images(context, pbr_type):
     return op_images
 
 
+# reorders the images
+# sets the start pos of the ImageTexture Node
+# breaks out of loop if the texture name 
+# does not include the name of the material
+# creates the textures 
+# increments the start pos
 def create_texture_nodes(context, pbr_type):
     ordered_images = reorder_images(context, pbr_type)
 
@@ -112,7 +135,7 @@ def create_texture_nodes(context, pbr_type):
         create_texture_node(texture, texture.name, start_pos, context)
         start_pos[1] += -256
 
-
+# Function used inside of the CreateBasicMaterialTextures class
 def _create_textures(type, texture_size, context):
     if type == "DEFAULT":
         create_image_textures_default(size=texture_size, context=context)
@@ -122,9 +145,7 @@ def _create_textures(type, texture_size, context):
         create_texture_nodes(context=context, pbr_type='ORM')
 
 
-
-
-
+# Sets the bake settings for quicker baking
 def _set_bake_settings(context, texture_size):
     scene = context.scene
 
@@ -136,7 +157,8 @@ def _set_bake_settings(context, texture_size):
     scene.render.bake.use_pass_indirect = False
 
    
-
+# Get the PBR_Bake node inside of the node tree 
+# so that the link_slot function has access to it
 def get_bake_node(ctx):
     obj = bpy.context.active_object
     mat = obj.material_slots[0].material
@@ -149,6 +171,7 @@ def get_bake_node(ctx):
         "mat_output" : mat_output
     }
 
+# Allows linking of outputs of the PBR_Bake node
 def link_slot(ctx, slot_name):
     # keys = get_bake_node(ctx)['nodes'].outputs.keys()
     
@@ -160,6 +183,8 @@ def link_slot(ctx, slot_name):
     tree.links.new(outputs, mat_output)
 
 
+
+# Very Big function for creating the PBR_Bake node group
 
 @persistent
 def create_the_stuff():
@@ -212,6 +237,8 @@ def create_the_stuff():
     for socket in io:
         pbr_bake_group.outputs.new(socket[2], socket[0])
 
+    # creates the orm input sockets, combineRGB node and
+    # emission node then links them up
     def create_orm():
         # create orm output socket
         pbr_bake_group.outputs.new("NodeSocketShader", "ORM")
@@ -235,7 +262,8 @@ def create_the_stuff():
 
     create_orm()
 
-
+    # itterate through all the sockets and link them together
+    # with an emmision node
     def create_slots_and_make_links():
         offset = 0
         for nodes in io:
