@@ -12,6 +12,7 @@ A Blender addon that aids in the creation of PBR Texture baking
 ![Side Panel](images/panel.png)
 ![Bake Node](images/bake_node.png)
 ![Textures](images/textures.webp)
+![Process](images/process.webp)
 
 
 # Mini Tutorial
