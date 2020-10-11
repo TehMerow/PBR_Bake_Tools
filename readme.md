@@ -9,9 +9,31 @@
 - Seperate buttons to bake each value
 
 # Images
+## Side Panel and Bake node
+The Side panel includes scene setup, texture creation and bake individual bake buttons
+
+***
+
+The PBR Bake Node has inputs and outputs for most of your PBR needs and will auto connect when you push one of the bake buttons on the sidebar
+
+***
+
 ![Side Panel](images/panel.png)
 ![Bake Node](images/bake_node.png)
+
+
+## Add Textures with a single button
+
+***
+
+Press a button and get a full PBR texture layout or an ORM texture layout
 ![Textures](images/textures.webp)
+
+***
+
+## Bake Textures with a single button
+Individual buttons for each bake pass so you don't have to navigate a drop down menu
+
 ![Process](images/process.webp)
 
 
