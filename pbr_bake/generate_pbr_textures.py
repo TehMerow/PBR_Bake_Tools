@@ -4,7 +4,7 @@ bl_info = {
     "version" : (1,0),
     "category": "Material",
     "author" : "Merow",
-    "doc_url" : "https://github.com/TehMerow/PBR_Bake_Tools",
+    "doc_url" : "https://github.com/TehMerow/PBR_Bake_Tools/wiki/Tutorial",
     "location" : "Node Editor > Properties Panel",
     "description" : "Aids in PBR Texture baking"
 }
