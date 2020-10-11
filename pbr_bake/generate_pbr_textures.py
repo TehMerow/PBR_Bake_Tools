@@ -555,11 +555,6 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
             'pbr_bake_image_tile_size',
             text="Tile Size"
         )
-        box.prop(
-            context.scene,
-            'pbr_bake_image_tile_size',
-            text="Tile Size"
-        )
         box.operator(
             operator="scene.setup_baking_scene", 
             text="Setup Baking Scene"
