@@ -27,11 +27,13 @@ The PBR Bake Node has inputs and outputs for most of your PBR needs and will aut
 ***
 
 Press a button and get a full PBR texture layout or an ORM texture layout
+
 ![Textures](images/textures.webp)
 
 ***
 
 ## Bake Textures with a single button
+
 Individual buttons for each bake pass so you don't have to navigate a drop down menu
 
 ![Process](images/process.webp)
