@@ -1,3 +1,12 @@
+"""
+    Disclaimer
+    I barely know how to write Python and any 
+    scripting experience I have is from JavaScript, 
+    GDScript(Godot script) and Lua
+
+    Appologies if the formatting is awful and it
+    hurts to look at
+"""
 bl_info = {
     "name"    : "PBR Bake Tools",
     "blender" : (2,90,1),
@@ -209,7 +218,7 @@ def create_the_stuff():
     group_inputs = pbr_bake_group.nodes.new("NodeGroupInput")
     group_inputs.location = (-350, 0)
 
-
+    
     for socket in io:
         pbr_bake_group.inputs.new(socket[1], socket[0]).default_value = socket[4]
 
