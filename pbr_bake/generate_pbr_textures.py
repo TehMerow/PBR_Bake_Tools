@@ -6,7 +6,7 @@ bl_info = {
     "author" : "Merow",
     "doc_url" : "https://github.com/TehMerow/PBR_Bake_Tools/wiki/Tutorial",
     "location" : "Node Editor > Properties Panel",
-    "description" : "Aids in PBR Texture baking"
+    "description" : "Aids in PBR Texture Baking"
 }
 
 import bpy
@@ -18,12 +18,6 @@ from bpy.utils import (
 from bpy.app.handlers import persistent
 from bpy.types import AddonPreferences
 
-bl_info = {
-    "name"    : "Prepare PBR Bake",
-    "blender" : (2,90,1),
-    "category": "Material",
-    "author" : "Merow"
-}
 
 image_names_full = [
     "base_color",
@@ -81,8 +75,6 @@ def create_image_textures_orm(size, context):
 # sets the name of the node
 # sets the position of the name
 # sets the image of the node
-
-
 def create_texture_node(image, name, position, context):
     texture_node = context.active_object.active_material.node_tree.nodes.new("ShaderNodeTexImage")
     texture_node.name = name
@@ -213,10 +205,10 @@ def create_the_stuff():
     ]
 
 
-
     # Create Group Inputs
     group_inputs = pbr_bake_group.nodes.new("NodeGroupInput")
     group_inputs.location = (-350, 0)
+
 
     for socket in io:
         pbr_bake_group.inputs.new(socket[1], socket[0]).default_value = socket[4]
@@ -311,6 +303,7 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
         description = "Which bake slot to choose"
     )
 
+    # Changes the scenes bake mode
     def set_bake_mode(self, mode):
         bpy.data.scenes['Scene'].cycles.bake_type = mode
 
@@ -324,7 +317,11 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
         layout.prop(self, "bake_slots")
     
     def execute(self, context):
-        # link_slot(context, bake_slots)
+        
+        # This big conditional checks against the bake_slots 
+        # property and delegates which bake mode should
+        # be used and links the appropriate output socket
+        # on the PBR_Bake Node
         
         if self.bake_slots == "base_color":
             link_slot(context, "Base Color")
@@ -380,10 +377,8 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
             link_slot(context, "Normal")
             bpy.data.scenes['Scene'].cycles.bake_type = "NORMAL"
 
-        # else:
-        #     return "invalid"
-        
         return {'FINISHED'}
+
 
 class SetupBakingScene(bpy.types.Operator):
     """Sets up the scene for baking PBR Materials"""
@@ -540,7 +535,7 @@ class AddPbrBakeNode(bpy.types.Operator):
 
 
 class PBRBakeTexture(bpy.types.Operator):
-    "links and bakes the texture"
+    """links and bakes the texture"""
     bl_idname = "node.bake_current_texture"
     bl_label = "link and bake"
     bl_options = {"REGISTER", "UNDO"}
@@ -568,6 +563,7 @@ class PBRBakeTexture(bpy.types.Operator):
 
 
 class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
+    """Panel for texture creation"""
     bl_label = "PBR Bake Setup"
     bl_category = "PBR Bake"
     bl_space_type = "NODE_EDITOR"
@@ -596,6 +592,7 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
 
 
 class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
+    """Panel for texture creation"""
     bl_label = "PBR Bake Textures"
     bl_category = "PBR Bake"
     bl_space_type = "NODE_EDITOR"
@@ -628,6 +625,7 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
 
 
 class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
+    """Panel containing the bake buttons"""
     bl_label = "PBR Bake "
     bl_category = "PBR Bake"
     bl_space_type = "NODE_EDITOR"
