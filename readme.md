@@ -10,7 +10,7 @@
 
 # Images
 ## Side Panel and Bake node
-The Side panel includes scene setup, texture creation and bake individual bake buttons
+The Side panel includes scene setup, texture creation and individual bake buttons
 
 ***
 
