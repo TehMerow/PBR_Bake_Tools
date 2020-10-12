@@ -723,10 +723,20 @@ def init_props():
         description = "The render tile size,"
     )
 
+    bpy.types.Scene.pbr_bake_image_size = bpy.props.IntProperty(
+        name="pbr_bake_image_size",
+        min=32,
+        max=2048,
+        default = 1024,
+        description = "The render tile size,"
+    )
+
 # Registration function
 def register():
     for cls in registration_classes:
         register_class(cls)
+    
+    init_props()
 
 def unregister():
     for cls in registration_classes:
