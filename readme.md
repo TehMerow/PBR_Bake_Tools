@@ -58,4 +58,3 @@ Individual buttons for each bake pass so you don't have to navigate a drop down 
 
 The better solution than this would be to use proper texture baking software like armorpaint but my computer can't handle those so this is my solution lol
 
-<iframe src="https://itch.io/embed/786526?linkback=true" width="552" height="167" frameborder="0"><a href="https://tehmerow.itch.io/pbr-bake-tools">PBR Bake Tools by Merow</a></iframe>
