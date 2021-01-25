@@ -152,8 +152,12 @@ def create_texture_nodes(context, pbr_type):
 
         start_pos[1] += -256
     
+    # Join the generated textures into a frame
     bpy.ops.node.join()
+
+    # Set the name and label of the frame
     context.active_object.active_material.node_tree.nodes['Frame'].label = "Bake Textures"
+    context.active_object.active_material.node_tree.nodes['Frame'].name = "Bake Textures"
 
 # Function used inside of the CreateBasicMaterialTextures class
 def _create_textures(type, texture_size, context):
