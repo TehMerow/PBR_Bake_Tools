@@ -215,6 +215,16 @@ def link_slot(ctx, slot_name):
     tree.links.new(outputs, mat_output)
 
 
+def link_to_bake_node(ctx, selected_slot):
+    bake_node = get_bake_node(ctx)['nodes']
+    tree = get_bake_node(ctx)['tree']
+    inputs = bake_node.inputs[selected_slot]
+
+    selected_node = ctx.active_object.active_material.node_tree.nodes.active.outputs[0]
+
+    tree.links.new(selected_node, inputs)
+    pass
+
 
 # Very Big function for creating the PBR_Bake node group
 
@@ -606,6 +616,88 @@ class PBRBakeTexture(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class ConnectToBakeNode(bpy.types.Operator):
+    bl_idname = "node.connect_to_bake_node"
+    bl_label  = "Link selected node to bake node"
+    bl_options = {"REGISTER", "UNDO"}
+
+
+    bake_slots : bpy.props.EnumProperty(
+        name = "Connect To Slot",
+        items = [
+            ("base_color", "Base Color", "The Base color or Albedo"),
+            ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
+            ("metalic", "Metalness", "The Metalness Slot"),
+            ("specular", "Specular", "Specular F0 Slot"),
+            ("rough", "Roughness", "Roughness slot"),
+            ("sheen", "Sheen", "Sheen slot"),
+            ("tint", "Sheen Tint", "Sheen Tint Slot"),
+            ("clearcoat", "Clearcoat", "Clearcoat Slot"),
+            ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
+            ("emit", "Emission", "Emission Slot"),
+            ("alpha", "Alpha", "Alpha Slot"),
+            ("orm", "ORM", "ORM slot. Red Channel = Occlusion, Green Channel = Roughness, Blue channel = Metalness"),
+            ("height", "Heightmap", "Heightmap, blender can't do this very well"),
+            ("normal", "NORMAL", "BSDF output for normal map"),
+        ],
+        description = "Connect current not to slot"
+    )
+
+    @classmethod
+    def poll(cls, context):
+        return context
+    
+    def draw(self, context):
+        layout = self.layout;
+        layout.prop(self, "bake_slots")
+
+    def execute(self, context):
+        # This big conditional checks against the bake_slots 
+        # property and delegates which bake mode should
+        # be used and links the appropriate output socket
+        # on the PBR_Bake Node
+        
+        if self.bake_slots == "base_color":
+            link_to_bake_node(context, "Base Color")
+        elif self.bake_slots == "ao":
+            link_to_bake_node(context, "AO")
+        elif self.bake_slots == "metalic":
+            link_to_bake_node(context, "Metalic")
+
+        elif self.bake_slots == "specular":
+            link_to_bake_node(context, "Specular")
+
+        elif self.bake_slots == "rough":
+            link_to_bake_node(context, "Roughness")
+
+        elif self.bake_slots == "sheen":
+            link_to_bake_node(context, "Sheen")
+
+        elif self.bake_slots == "tint":
+            link_to_bake_node(context, "Sheen Tint")
+
+        elif self.bake_slots == "clearcoat":
+            link_to_bake_node(context, "Clearcoat")
+
+        elif self.bake_slots == "clear_rough":
+            link_to_bake_node(context, "Clearcoat Rough")
+
+        elif self.bake_slots == "emit":
+            link_to_bake_node(context, "Emission")
+
+        elif self.bake_slots == "alpha":
+            link_to_bake_node(context, "Alpha")
+
+        elif self.bake_slots == "orm":
+            link_to_bake_node(context, "ORM")
+
+        elif self.bake_slots == "height":
+            link_to_bake_node(context, "Heightmap")
+
+        elif self.bake_slots == "normal":
+            link_to_bake_node(context, "Normal")
+        return {'FINISHED'}
+
 
 class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
     """Panel for texture creation"""
@@ -741,6 +833,7 @@ registration_classes = (
     LinkSlotsFromBakeNode,
     AddPbrBakeNode,
     PBRBakeTexture,
+    ConnectToBakeNode,
     NODE_PT_Bake_Panel_setup,
     NODE_PT_PBR_Bake_Textures,
     NODE_PT_PBR_Bake_Bake,
