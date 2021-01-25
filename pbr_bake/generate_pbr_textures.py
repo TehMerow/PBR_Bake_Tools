@@ -761,7 +761,7 @@ class PbrBakeConnectMenu(bpy.types.Menu):
 
 class PbrBakeConnectMenuPie(bpy.types.Menu):
     bl_idname = "NODE_MT_pbr_pbr_bake_menu_pie"
-    bl_label = "Conected Selected to Bake Slot"
+    bl_label = "Connect Selected Node to PBR Bake Node Slot"
 
     def draw(self, context):
         type = context.space_data.tree_type
@@ -784,7 +784,7 @@ class PbrBakeConnectMenuPie(bpy.types.Menu):
         ]
 
         for item in slots:
-            pie.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+            layout.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
             # pie.operator(ConnectToBakeNode.bl_idname, text=item[1])
 
 
