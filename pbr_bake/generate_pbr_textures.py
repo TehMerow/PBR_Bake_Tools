@@ -9,7 +9,7 @@
 """
 bl_info = {
     "name"    : "PBR Bake Tools",
-    "blender" : (2,91,1),
+    "blender" : (2,91,0),
     "version" : (1,1),
     "category": "Material",
     "author" : "Merow",
