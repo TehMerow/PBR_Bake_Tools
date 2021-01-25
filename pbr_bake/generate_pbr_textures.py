@@ -28,22 +28,25 @@ from bpy.app.handlers import persistent
 from bpy.types import AddonPreferences
 
 
+COLOR_SPACE_SRGB = "sRGB"
+COLOR_SPACE_NON_COLOR = "Non-Color"
+
 image_names_full = [
-    "base_color",
-    "ambient_occlusion",
-    "specular",
-    "metalness",
-    "roughness",
-    "normal",
-    "height",
+    {"name": "base_color", "colorspace": COLOR_SPACE_SRGB},
+    {"name": "ambient_occlusion", "colorspace": COLOR_SPACE_SRGB},
+    {"name": "specular", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "metalness", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "roughness", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "normal", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "height", "colorspace": COLOR_SPACE_NON_COLOR},
 ]
 
 image_names_orm = [
-    "base_color",
-    "specular",
-    "ORM",
-    "normal",
-    "height"
+    {"name": "base_color", "colorspace": COLOR_SPACE_SRGB},
+    {"name": "specular", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "ORM", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "normal", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "height", "colorspace": COLOR_SPACE_NON_COLOR}
 ]
 
 
@@ -54,7 +57,7 @@ def create_image_texture(name, size, context):
         stores it into memory
     """
     active_mat = context.active_object.active_material.name  
-    mat_name = active_mat + "-" + name
+    mat_name = active_mat + "-" + name['name']
     
     bpy.ops.image.new(
         name= mat_name, 
@@ -64,6 +67,7 @@ def create_image_texture(name, size, context):
         alpha=True,
         generated_type="BLANK",
     )
+    bpy.data.images[mat_name].colorspace_settings.name = name['colorspace']
 
 
 # Creates Image textures based on the image_names_full list
