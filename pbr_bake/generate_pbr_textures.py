@@ -49,6 +49,13 @@ image_names_orm = [
     {"name": "height", "colorspace": COLOR_SPACE_NON_COLOR}
 ]
 
+render_settings_pre_bake_scene_setup = {
+    "samples" : 32,
+    "tile_size" : {
+        'x' : 16,
+        'y' : 16
+    },
+}
 
 def create_image_texture(name, size, context):
     """
@@ -154,6 +161,14 @@ def _create_textures(type, texture_size, context):
 def _set_bake_settings(context, texture_size):
     scene = context.scene
 
+    # cache old settings
+
+    render_settings_pre_bake_scene_setup['samples'] = scene.cycles.samples
+    render_settings_pre_bake_scene_setup['tile_size']['x'] = scene.render.tile_x
+    render_settings_pre_bake_scene_setup['tile_size']['y'] = scene.render.tile_y
+
+    # set items with new stuff
+    
     scene.cycles.samples = 1
     scene.render.tile_x = texture_size
     scene.render.tile_y = texture_size
@@ -459,13 +474,14 @@ class ResetBakeSettings(bpy.types.Operator):
 
 
     def execute(self, context):
-        sam = self.render_samples
-        tile = self.render_tile_size
+        sam = render_settings_pre_bake_scene_setup['samples']
+        tile_x = render_settings_pre_bake_scene_setup['tile_size']['x']
+        tile_y = render_settings_pre_bake_scene_setup['tile_size']['y']
         scene = context.scene
 
         scene.cycles.samples = sam
-        scene.render.tile_x = tile
-        scene.render.tile_y = tile
+        scene.render.tile_x = tile_x
+        scene.render.tile_y = tile_y
         return {'FINISHED'}
 
 
