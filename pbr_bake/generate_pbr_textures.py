@@ -645,7 +645,7 @@ class ConnectToBakeNode(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context
+        return context.active_object.active_material.node_tree.nodes.active is not None
     
     def draw(self, context):
         layout = self.layout;
@@ -710,6 +710,7 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
         layout = self.layout
 
         box = layout.box()
+        pie = layout.menu_pie()
         box.label(text="Scene Setup")  
 
         tile_size = box.prop(
@@ -727,11 +728,9 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
             text = "reset baking scene"
         )
 
-        box.operator(
-            operator=PbrBakeConnectMenu.bl_idname,
-            text = "test"
-        )
+
         box.menu(PbrBakeConnectMenu.bl_idname)
+
 
 class PbrBakeConnectMenu(bpy.types.Menu):
     bl_idname = "NODE_MT_pbr_pbr_bake_menu"
@@ -759,6 +758,49 @@ class PbrBakeConnectMenu(bpy.types.Menu):
         for item in slots:
             layout.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
 
+
+class PbrBakeConnectMenuPie(bpy.types.Menu):
+    bl_idname = "NODE_MT_pbr_pbr_bake_menu_pie"
+    bl_label = "Conected Selected to Bake Slot"
+
+    def draw(self, context):
+        type = context.space_data.tree_type
+        layout = self.layout
+        pie = layout.box()
+
+        slots = [
+            ("base_color", "Base Color", "The Base color or Albedo"),
+            ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
+            ("metalic", "Metalness", "The Metalness Slot"),
+            ("specular", "Specular", "Specular F0 Slot"),
+            ("rough", "Roughness", "Roughness slot"),
+            ("sheen", "Sheen", "Sheen slot"),
+            ("tint", "Sheen Tint", "Sheen Tint Slot"),
+            ("clearcoat", "Clearcoat", "Clearcoat Slot"),
+            ("emit", "Emission", "Emission Slot"),
+            ("alpha", "Alpha", "Alpha Slot"),
+            # ("height", "Heightmap", "Heightmap, blender can't do this very well"),
+            ("normal", "NORMAL", "BSDF output for normal map"),
+        ]
+
+        for item in slots:
+            pie.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+            # pie.operator(ConnectToBakeNode.bl_idname, text=item[1])
+
+
+class CallPbrBakePieMenu(bpy.types.Operator):
+    bl_idname = "wm.call_pie_menu"
+    bl_label = "calls the pie menu for connection"
+
+    @classmethod
+    def poll(self, context):
+        return context
+
+    def execute(self, context):
+          bpy.ops.wm.call_menu(name=PbrBakeConnectMenuPie.bl_idname)
+
+          return {'FINISHED'}
+  
 
 class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
     """Panel for texture creation"""
@@ -858,6 +900,8 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
         ).bake_slot = "normal"
 
 
+
+
 """
 Tuple for registering classes
 """
@@ -871,6 +915,8 @@ registration_classes = (
     PBRBakeTexture,
     ConnectToBakeNode,
     PbrBakeConnectMenu,
+    PbrBakeConnectMenuPie,
+    CallPbrBakePieMenu,
     NODE_PT_Bake_Panel_setup,
     NODE_PT_PBR_Bake_Textures,
     NODE_PT_PBR_Bake_Bake,
@@ -897,6 +943,9 @@ def init_props():
         description = "The render tile size,"
     )
 
+addon_keymaps = []
+
+
 # Registration function
 def register():
     for cls in registration_classes:
@@ -904,10 +953,28 @@ def register():
     
     init_props()
 
+
+    # handle the keymap
+    wm = bpy.context.window_manager
+    km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
+    kmi = km.keymap_items.new(CallPbrBakePieMenu.bl_idname, 'C', 'PRESS', ctrl=True, shift=False, alt=True)
+    addon_keymaps.append(km)
+
 def unregister():
     for cls in registration_classes:
         unregister_class(cls)
     
 
+    wm = bpy.context.window_manager
+
+    for km in addon_keymaps:
+        wm.keyconfigs.addon.keymaps.remove(km)
+
+        del addon_keymaps[:]
+
 if __name__ == "__main__":
     register()
+
+
+
+    
