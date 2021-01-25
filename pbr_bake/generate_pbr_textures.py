@@ -9,8 +9,8 @@
 """
 bl_info = {
     "name"    : "PBR Bake Tools",
-    "blender" : (2,90,1),
-    "version" : (1,0),
+    "blender" : (2,91,1),
+    "version" : (1,1),
     "category": "Material",
     "author" : "Merow",
     "doc_url" : "https://github.com/TehMerow/PBR_Bake_Tools/wiki/Tutorial",
@@ -114,7 +114,7 @@ def reorder_images(context, pbr_type):
     if pbr_type == 'DEFAULT':
         image_order = [1, 0, 6, 5, 4, 2]
     elif pbr_type == 'ORM':
-        image_order = [1, 4, 0, 3, 2]
+        image_order = [0, 4, 3, 2, 1]
         pass
 
     op_images = [op_images[i] for i in image_order]
