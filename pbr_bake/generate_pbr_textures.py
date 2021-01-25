@@ -98,6 +98,7 @@ def create_image_textures_orm(size, context):
 def create_texture_node(image, name, position, context):
     texture_node = context.active_object.active_material.node_tree.nodes.new("ShaderNodeTexImage")
     texture_node.name = name
+    texture_node.label = "PBR_Bake: " + name
     texture_node.location = position
     texture_node.image = image
  
@@ -138,13 +139,17 @@ def reorder_images(context, pbr_type):
 def create_texture_nodes(context, pbr_type):
     ordered_images = reorder_images(context, pbr_type)
 
-    start_pos = [-512,2048]
+    material_output_node_position = context.active_object.active_material.node_tree.nodes['Material Output'].location
+
+    start_pos = [material_output_node_position[0] + 256, material_output_node_position[1] + 512]
     for texture in ordered_images:
         mat_name = context.active_object.active_material.name
         if texture.name.find(mat_name) == -1:
             continue
 
         create_texture_node(texture, texture.name, start_pos, context)
+
+
         start_pos[1] += -256
 
 # Function used inside of the CreateBasicMaterialTextures class
@@ -557,11 +562,13 @@ class AddPbrBakeNode(bpy.types.Operator):
         mat = context.active_object.material_slots[0].material
         tree = mat.node_tree
 
+        material_output_node_position = context.active_object.active_material.node_tree.nodes['Material Output'].location
+
         bpy.ops.node.add_node(type="ShaderNodeGroup", use_transform=True, settings=[{"name":"node_tree", "value":"bpy.data.node_groups['PBR_Bake']"}])
 
         active_node = tree.nodes.active
         active_node.name = "PBR_Bake"
-        active_node.location = (300, 0)
+        active_node.location = (material_output_node_position[0] + 800, material_output_node_position[1] + 64)
         return {'FINISHED'}
 
 
