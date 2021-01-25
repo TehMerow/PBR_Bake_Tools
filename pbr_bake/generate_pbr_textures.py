@@ -140,7 +140,7 @@ def create_texture_nodes(context, pbr_type):
     ordered_images = reorder_images(context, pbr_type)
 
     material_output_node_position = context.active_object.active_material.node_tree.nodes['Material Output'].location
-
+    bpy.ops.node.select_all(action='TOGGLE')
     start_pos = [material_output_node_position[0] + 256, material_output_node_position[1] + 512]
     for texture in ordered_images:
         mat_name = context.active_object.active_material.name
