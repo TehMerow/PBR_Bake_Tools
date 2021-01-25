@@ -727,6 +727,38 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
             text = "reset baking scene"
         )
 
+        box.operator(
+            operator=PbrBakeConnectMenu.bl_idname,
+            text = "test"
+        )
+        box.menu(PbrBakeConnectMenu.bl_idname)
+
+class PbrBakeConnectMenu(bpy.types.Menu):
+    bl_idname = "NODE_MT_pbr_pbr_bake_menu"
+    bl_label = "Conected Selected to Bake Slot"
+
+    def draw(self, context):
+        type = context.space_data.tree_type
+        layout = self.layout
+
+        slots = [
+            ("base_color", "Base Color", "The Base color or Albedo"),
+            ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
+            ("metalic", "Metalness", "The Metalness Slot"),
+            ("specular", "Specular", "Specular F0 Slot"),
+            ("rough", "Roughness", "Roughness slot"),
+            ("sheen", "Sheen", "Sheen slot"),
+            ("tint", "Sheen Tint", "Sheen Tint Slot"),
+            ("clearcoat", "Clearcoat", "Clearcoat Slot"),
+            ("emit", "Emission", "Emission Slot"),
+            ("alpha", "Alpha", "Alpha Slot"),
+            # ("height", "Heightmap", "Heightmap, blender can't do this very well"),
+            ("normal", "NORMAL", "BSDF output for normal map"),
+        ]
+
+        for item in slots:
+            layout.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+
 
 class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
     """Panel for texture creation"""
@@ -738,6 +770,7 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         box = layout.box()
+        pie = layout.menu_pie()
 
         box.label(text="Texture Creators")
         box.prop(
@@ -759,6 +792,9 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
             operator = "node.add_bake_node",
             text = "Add Bake Node"
         )
+
+
+
 
 
 class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
@@ -834,6 +870,7 @@ registration_classes = (
     AddPbrBakeNode,
     PBRBakeTexture,
     ConnectToBakeNode,
+    PbrBakeConnectMenu,
     NODE_PT_Bake_Panel_setup,
     NODE_PT_PBR_Bake_Textures,
     NODE_PT_PBR_Bake_Bake,
