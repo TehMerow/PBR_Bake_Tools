@@ -214,6 +214,8 @@ def create_the_stuff():
         ("Transmission", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
         ("Transmission Roughness", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
         ("Normal", "NodeSocketVector", "NodeSocketShader", "ShaderNodeBsdfDiffuse",(0.0,0.0,0.0)),
+        ("Height", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
+
 
     ]
 
@@ -263,7 +265,7 @@ def create_the_stuff():
         # Connect combinergb node to emission node
         # then connect emmision node to output
         pbr_bake_group.links.new(node_combine_rgb.outputs[0], emit_node.inputs[0])
-        pbr_bake_group.links.new(emit_node.outputs[0], group_outputs.inputs[14])
+        pbr_bake_group.links.new(emit_node.outputs[0], group_outputs.inputs[15])
 
     create_orm()
 
