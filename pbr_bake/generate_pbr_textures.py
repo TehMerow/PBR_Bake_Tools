@@ -151,6 +151,9 @@ def create_texture_nodes(context, pbr_type):
 
 
         start_pos[1] += -256
+    
+    bpy.ops.node.join()
+    context.active_object.active_material.node_tree.nodes['Frame'].label = "Bake Textures"
 
 # Function used inside of the CreateBasicMaterialTextures class
 def _create_textures(type, texture_size, context):
