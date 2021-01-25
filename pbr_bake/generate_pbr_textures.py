@@ -733,7 +733,7 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
 
 
 class PbrBakeConnectMenu(bpy.types.Menu):
-    bl_idname = "NODE_MT_pbr_pbr_bake_menu"
+    bl_idname = "NODE_MT_pbr_bake_connect_menu"
     bl_label = "Conected Selected to Bake Slot"
 
     def draw(self, context):
@@ -759,14 +759,14 @@ class PbrBakeConnectMenu(bpy.types.Menu):
             layout.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
 
 
-class PbrBakeConnectMenuPie(bpy.types.Menu):
-    bl_idname = "NODE_MT_pbr_pbr_bake_menu_pie"
-    bl_label = "Connect Selected Node to PBR Bake Node Slot"
+class PbrBakeBakeMenu(bpy.types.Menu):
+
+    bl_idname = "NODE_MT_pbr_bake_bake_menu"
+    bl_label = "Bake Channel"
 
     def draw(self, context):
         type = context.space_data.tree_type
         layout = self.layout
-        pie = layout.box()
 
         slots = [
             ("base_color", "Base Color", "The Base color or Albedo"),
@@ -784,11 +784,21 @@ class PbrBakeConnectMenuPie(bpy.types.Menu):
         ]
 
         for item in slots:
-            layout.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
-            # pie.operator(ConnectToBakeNode.bl_idname, text=item[1])
+            layout.operator(PBRBakeTexture.bl_idname, text=item[1]).bake_slot = item[0]
 
 
-class CallPbrBakePieMenu(bpy.types.Operator):
+class PbrBakeMenu(bpy.types.Menu):
+    bl_idname = "WM_pbr_bake_menu"
+    bl_label = "PBR Bake Menu"
+
+    def draw(self, context):
+        layout = self.layout
+
+        layout.menu(PbrBakeConnectMenu.bl_idname)
+        layout.menu(PbrBakeBakeMenu.bl_idname)
+
+
+class CallPbrBakeMenu(bpy.types.Operator):
     bl_idname = "wm.call_pie_menu"
     bl_label = "calls the pie menu for connection"
 
@@ -797,7 +807,8 @@ class CallPbrBakePieMenu(bpy.types.Operator):
         return context
 
     def execute(self, context):
-          bpy.ops.wm.call_menu(name=PbrBakeConnectMenuPie.bl_idname)
+        #   bpy.ops.wm.call_menu(name=PbrBakeConnectMenu.bl_idname)
+          bpy.ops.wm.call_menu(name=PbrBakeMenu.bl_idname)
 
           return {'FINISHED'}
   
@@ -915,8 +926,9 @@ registration_classes = (
     PBRBakeTexture,
     ConnectToBakeNode,
     PbrBakeConnectMenu,
-    PbrBakeConnectMenuPie,
-    CallPbrBakePieMenu,
+    CallPbrBakeMenu,
+    PbrBakeBakeMenu,
+    PbrBakeMenu,
     NODE_PT_Bake_Panel_setup,
     NODE_PT_PBR_Bake_Textures,
     NODE_PT_PBR_Bake_Bake,
@@ -957,7 +969,7 @@ def register():
     # handle the keymap
     wm = bpy.context.window_manager
     km = wm.keyconfigs.addon.keymaps.new(name='Node Editor', space_type='NODE_EDITOR')
-    kmi = km.keymap_items.new(CallPbrBakePieMenu.bl_idname, 'C', 'PRESS', ctrl=True, shift=False, alt=True)
+    kmi = km.keymap_items.new(CallPbrBakeMenu.bl_idname, 'C', 'PRESS', ctrl=True, shift=True, alt=False)
     addon_keymaps.append(km)
 
 def unregister():
