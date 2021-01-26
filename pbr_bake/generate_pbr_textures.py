@@ -1002,14 +1002,18 @@ class PbrBakeToolsAddonPrefs(bpy.types.AddonPreferences):
         max = 2048
     )
 
-
     def draw(self, context):
+        is_visible = False
+        
+    
         layout = self.layout
         col = layout.column()
 
+        col.label(text="Hotkey: ctrl+shift+c in node editor")
+        if is_visible == False:
+            return
         col.prop(self, property="default_texture_size", text="Default Texture Size")
         col.prop(self, property="default_tile_size", text="Default Tile Size (Unstable)")
-
 """
 Tuple for registering classes
 """
@@ -1035,7 +1039,7 @@ registration_classes = (
 )
 
 def init_props():
-    
+    prefs = bpy.context.preferences.addons['generate_pbr_textures'].preferences
     # Scene props for Addon
 
     # Scene prop for tile size
@@ -1043,7 +1047,7 @@ def init_props():
         name="pbr_bake_image_tile_size",
         min=1,
         max=1024,
-        default = 256,
+        default = prefs.default_texture_size,
         description = "The render tile size,"
     )
 
@@ -1051,7 +1055,7 @@ def init_props():
         name="pbr_bake_image_size",
         min=32,
         max=2048,
-        default = 1024,
+        default = prefs.default_tile_size,
         description = "The render tile size,"
     )
 
