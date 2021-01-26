@@ -62,7 +62,7 @@ Individual buttons for each bake pass so you don't have to navigate a drop down 
 
 ---
 
-# Recomended Add-ons
+# Recommended Add-ons
 
 Where these add-ons are not required for this one to work, they are nice to have for it
 
