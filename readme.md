@@ -66,9 +66,9 @@ Individual buttons for each bake pass so you don't have to navigate a drop down 
 
 Where these add-ons are not required for this one to work, they are nice to have for it
 
-[Vertex Color Master](https://github.com/andyp123/blender_vertex_color_master) - Useful for making Vertex Color Masks for multiple textures in a single material
+[Vertex Color Master](https://github.com/andyp123/blender_vertex_color_master) ➡ Useful for making Vertex Color Masks for multiple textures in a single material
 
-[Node Wrangler *(Blender Built-in add-on)*](https://docs.blender.org/manual/en/latest/addons/node/node_wrangler.html) - Just good to have on  
+[Node Wrangler *(Blender Built-in add-on)*](https://docs.blender.org/manual/en/latest/addons/node/node_wrangler.html) ➡ Just good to have on  
 
 # Gotchas
 
