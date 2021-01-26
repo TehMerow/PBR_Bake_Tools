@@ -362,10 +362,10 @@ def create_the_stuff():
 
 
 
-class LinkSlotsFromBakeNode(bpy.types.Operator):
-    """Links the slots from the custom node group"""
-    bl_idname = "node.link_bake_slots"
-    bl_label = "Link Slots from Bake Node"
+class LinkSlotsFromBakeNodeAndBake(bpy.types.Operator):
+    """Links the slots from the custom node group and bakes"""
+    bl_idname = "node.link_bake_slots_and_bake"
+    bl_label = "Links PBR Bake node to material output then bakes"
     bl_options = {'REGISTER', 'UNDO'}
 
     bake_slots : bpy.props.EnumProperty(
@@ -447,6 +447,77 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
         elif self.bake_slots == "normal":
             link_slot(context, "Normal")
             bpy.data.scenes['Scene'].cycles.bake_type = "NORMAL"
+
+        return {'FINISHED'}
+
+
+class LinkSlotsFromBakeNode(bpy.types.Operator):
+    """Links the slots from the custom node group"""
+    bl_idname = "node.link_bake_slots"
+    bl_label = "Link Output slots from PBR Bake Node to Material Output"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    bake_slots : bpy.props.EnumProperty(
+        items = bake_slots_output,
+        name = "Bake Slot",
+        description = "Which bake slot to choose"
+    )
+
+
+    @classmethod
+    def poll(cls, context):
+        return context
+    
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "bake_slots")
+    
+    def execute(self, context):
+        
+        # This big conditional checks against the bake_slots 
+        # property and delegates which bake mode should
+        # be used and links the appropriate output socket
+        # on the PBR_Bake Node
+        
+        if self.bake_slots == "base_color":
+            link_slot(context, "Base Color")
+        elif self.bake_slots == "ao":
+            link_slot(context, "AO")
+        elif self.bake_slots == "metalic":
+            link_slot(context, "Metalic")
+
+        elif self.bake_slots == "specular":
+            link_slot(context, "Specular")
+
+        elif self.bake_slots == "rough":
+            link_slot(context, "Roughness")
+
+        elif self.bake_slots == "sheen":
+            link_slot(context, "Sheen")
+
+        elif self.bake_slots == "tint":
+            link_slot(context, "Sheen Tint")
+
+        elif self.bake_slots == "clearcoat":
+            link_slot(context, "Clearcoat")
+
+        elif self.bake_slots == "clear_rough":
+            link_slot(context, "Clearcoat Rough")
+
+        elif self.bake_slots == "emit":
+            link_slot(context, "Emission")
+
+        elif self.bake_slots == "alpha":
+            link_slot(context, "Alpha")
+
+        elif self.bake_slots == "orm":
+            link_slot(context, "ORM")
+
+        elif self.bake_slots == "height":
+            link_slot(context, "Heightmap")
+
+        elif self.bake_slots == "normal":
+            link_slot(context, "Normal")
 
         return {'FINISHED'}
 
@@ -763,7 +834,7 @@ class PbrBakeConnectMenu(bpy.types.Menu):
 
 class PbrBakeBakeMenu(bpy.types.Menu):
 
-    bl_idname = "NODE_MT_pbr_bake_bake_menu"
+    bl_idname = "NODE_MT_pbr_bake_bake_channel_menu"
     bl_label = "Bake Channel"
 
     def draw(self, context):
@@ -774,6 +845,17 @@ class PbrBakeBakeMenu(bpy.types.Menu):
 
         for item in slots:
             layout.operator(PBRBakeTexture.bl_idname, text=item[1]).bake_slot = item[0]
+
+class PbrBakeConnectToMaterialOutputMenu(bpy.types.Menu):
+    bl_idname = "NODE_MT_pbr_bake_menu_connect_to_material_output"
+    bl_label = "Connect Slot from PBR Bake Node to Material Output Node"
+
+    def draw(self, context):
+        layout = self.layout
+
+        slots = bake_slots_output
+        for item in slots :
+            layout.operator(LinkSlotsFromBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
 
 
 class PbrBakeMenu(bpy.types.Menu):
@@ -786,6 +868,7 @@ class PbrBakeMenu(bpy.types.Menu):
         layout.operator(AddPbrBakeNode.bl_idname, text="Add PBR Bake Node", icon="ADD")
         layout.menu(PbrBakeConnectMenu.bl_idname, icon="TRIA_RIGHT")
         layout.menu(PbrBakeBakeMenu.bl_idname, icon="TRIA_RIGHT")
+        layout.menu(PbrBakeConnectToMaterialOutputMenu.bl_idname, icon="TRIA_RIGHT")
 
 
 class CallPbrBakeMenu(bpy.types.Operator):
@@ -911,6 +994,7 @@ registration_classes = (
     CreateBasicMaterialTextures,
     CreateORMMaterialTextures,
     ResetBakeSettings,
+    LinkSlotsFromBakeNodeAndBake,
     LinkSlotsFromBakeNode,
     AddPbrBakeNode,
     PBRBakeTexture,
@@ -918,7 +1002,9 @@ registration_classes = (
     PbrBakeConnectMenu,
     CallPbrBakeMenu,
     PbrBakeBakeMenu,
+    PbrBakeConnectToMaterialOutputMenu,
     PbrBakeMenu,
+    
     NODE_PT_Bake_Panel_setup,
     NODE_PT_PBR_Bake_Textures,
     NODE_PT_PBR_Bake_Bake,
