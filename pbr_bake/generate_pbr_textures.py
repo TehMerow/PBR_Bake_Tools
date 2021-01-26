@@ -10,7 +10,7 @@
 bl_info = {
     "name"    : "PBR Bake Tools",
     "blender" : (2,91,0),
-    "version" : (1,1),
+    "version" : (1,2),
     "category": "Material",
     "author" : "Merow",
     "doc_url" : "https://github.com/TehMerow/PBR_Bake_Tools/wiki/Tutorial",
