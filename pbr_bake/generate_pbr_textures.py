@@ -645,7 +645,11 @@ class ConnectToBakeNode(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.active_object.active_material.node_tree.nodes.active is not None
+        valid = False
+        if context.active_object.material_slots['Material'].material.node_tree.nodes['PBR_Bake'] is not None:
+            valid = True
+
+        return valid
     
     def draw(self, context):
         layout = self.layout;
@@ -656,6 +660,7 @@ class ConnectToBakeNode(bpy.types.Operator):
         # property and delegates which bake mode should
         # be used and links the appropriate output socket
         # on the PBR_Bake Node
+      
         
         if self.bake_slots == "base_color":
             link_to_bake_node(context, "Base Color")
