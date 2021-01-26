@@ -57,6 +57,40 @@ render_settings_pre_bake_scene_setup = {
     },
 }
 
+
+bake_slots_input = [
+    ("base_color", "Base Color", "The Base color or Albedo"),
+    ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
+    ("metalic", "Metalness", "The Metalness Slot"),
+    ("specular", "Specular", "Specular F0 Slot"),
+    ("rough", "Roughness", "Roughness slot"),
+    ("sheen", "Sheen", "Sheen slot"),
+    ("tint", "Sheen Tint", "Sheen Tint Slot"),
+    ("clearcoat", "Clearcoat", "Clearcoat Slot"),
+    ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
+    ("emit", "Emission", "Emission Slot"),
+    ("alpha", "Alpha", "Alpha Slot"),
+    ("height", "Heightmap", "Heightmap, blender can't do this very well"),
+    ("normal", "NORMAL", "BSDF output for normal map"),
+]
+
+bake_slots_output =  [
+    ("base_color", "Base Color", "The Base color or Albedo"),
+    ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
+    ("metalic", "Metalness", "The Metalness Slot"),
+    ("specular", "Specular", "Specular F0 Slot"),
+    ("rough", "Roughness", "Roughness slot"),
+    ("sheen", "Sheen", "Sheen slot"),
+    ("tint", "Sheen Tint", "Sheen Tint Slot"),
+    ("clearcoat", "Clearcoat", "Clearcoat Slot"),
+    ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
+    ("emit", "Emission", "Emission Slot"),
+    ("alpha", "Alpha", "Alpha Slot"),
+    ("orm", "ORM", "ORM slot. Red Channel = Occlusion, Green Channel = Roughness, Blue channel = Metalness"),
+    ("height", "Heightmap", "Heightmap, blender can't do this very well"),
+    ("normal", "NORMAL", "BSDF output for normal map"),
+]
+
 def create_image_texture(name, size, context):
     """
         Creates an image texture
@@ -251,7 +285,7 @@ def create_the_stuff():
         ("Transmission", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
         ("Transmission Roughness", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
         ("Normal", "NodeSocketVector", "NodeSocketShader", "ShaderNodeBsdfDiffuse",(0.0,0.0,0.0)),
-        ("Height", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
+        ("Heightmap", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
 
 
     ]
@@ -335,22 +369,7 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     bake_slots : bpy.props.EnumProperty(
-        items = [
-            ("base_color", "Base Color", "The Base color or Albedo"),
-            ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
-            ("metalic", "Metalness", "The Metalness Slot"),
-            ("specular", "Specular", "Specular F0 Slot"),
-            ("rough", "Roughness", "Roughness slot"),
-            ("sheen", "Sheen", "Sheen slot"),
-            ("tint", "Sheen Tint", "Sheen Tint Slot"),
-            ("clearcoat", "Clearcoat", "Clearcoat Slot"),
-            ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
-            ("emit", "Emission", "Emission Slot"),
-            ("alpha", "Alpha", "Alpha Slot"),
-            ("orm", "ORM", "ORM slot. Red Channel = Occlusion, Green Channel = Roughness, Blue channel = Metalness"),
-            ("height", "Heightmap", "Heightmap, blender can't do this very well"),
-            ("normal", "NORMAL", "BSDF output for normal map"),
-        ],
+        items = bake_slots_output,
         name = "Bake Slot",
         description = "Which bake slot to choose"
     )
@@ -617,6 +636,9 @@ class PBRBakeTexture(bpy.types.Operator):
 
 
 class ConnectToBakeNode(bpy.types.Operator):
+    """
+        Connect the selected node to the bake node
+    """
     bl_idname = "node.connect_to_bake_node"
     bl_label  = "Link selected node to bake node"
     bl_options = {"REGISTER", "UNDO"}
@@ -624,22 +646,7 @@ class ConnectToBakeNode(bpy.types.Operator):
 
     bake_slots : bpy.props.EnumProperty(
         name = "Connect To Slot",
-        items = [
-            ("base_color", "Base Color", "The Base color or Albedo"),
-            ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
-            ("metalic", "Metalness", "The Metalness Slot"),
-            ("specular", "Specular", "Specular F0 Slot"),
-            ("rough", "Roughness", "Roughness slot"),
-            ("sheen", "Sheen", "Sheen slot"),
-            ("tint", "Sheen Tint", "Sheen Tint Slot"),
-            ("clearcoat", "Clearcoat", "Clearcoat Slot"),
-            ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
-            ("emit", "Emission", "Emission Slot"),
-            ("alpha", "Alpha", "Alpha Slot"),
-            ("orm", "ORM", "ORM slot. Red Channel = Occlusion, Green Channel = Roughness, Blue channel = Metalness"),
-            ("height", "Heightmap", "Heightmap, blender can't do this very well"),
-            ("normal", "NORMAL", "BSDF output for normal map"),
-        ],
+        items = bake_slots_input,
         description = "Connect current not to slot"
     )
 
@@ -685,7 +692,7 @@ class ConnectToBakeNode(bpy.types.Operator):
             link_to_bake_node(context, "Clearcoat")
 
         elif self.bake_slots == "clear_rough":
-            link_to_bake_node(context, "Clearcoat Rough")
+            link_to_bake_node(context, "Clearcoat Roughness")
 
         elif self.bake_slots == "emit":
             link_to_bake_node(context, "Emission")
@@ -738,6 +745,9 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
 
 
 class PbrBakeConnectMenu(bpy.types.Menu):
+    """
+        popup menu for connecting selected no to bake node
+    """
     bl_idname = "NODE_MT_pbr_bake_connect_menu"
     bl_label = "Conected Selected to Bake Slot"
 
@@ -745,20 +755,7 @@ class PbrBakeConnectMenu(bpy.types.Menu):
         type = context.space_data.tree_type
         layout = self.layout
 
-        slots = [
-            ("base_color", "Base Color", "The Base color or Albedo"),
-            ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
-            ("metalic", "Metalness", "The Metalness Slot"),
-            ("specular", "Specular", "Specular F0 Slot"),
-            ("rough", "Roughness", "Roughness slot"),
-            ("sheen", "Sheen", "Sheen slot"),
-            ("tint", "Sheen Tint", "Sheen Tint Slot"),
-            ("clearcoat", "Clearcoat", "Clearcoat Slot"),
-            ("emit", "Emission", "Emission Slot"),
-            ("alpha", "Alpha", "Alpha Slot"),
-            # ("height", "Heightmap", "Heightmap, blender can't do this very well"),
-            ("normal", "NORMAL", "BSDF output for normal map"),
-        ]
+        slots = bake_slots_input
 
         for item in slots:
             layout.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
@@ -773,20 +770,7 @@ class PbrBakeBakeMenu(bpy.types.Menu):
         type = context.space_data.tree_type
         layout = self.layout
 
-        slots = [
-            ("base_color", "Base Color", "The Base color or Albedo"),
-            ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
-            ("metalic", "Metalness", "The Metalness Slot"),
-            ("specular", "Specular", "Specular F0 Slot"),
-            ("rough", "Roughness", "Roughness slot"),
-            ("sheen", "Sheen", "Sheen slot"),
-            ("tint", "Sheen Tint", "Sheen Tint Slot"),
-            ("clearcoat", "Clearcoat", "Clearcoat Slot"),
-            ("emit", "Emission", "Emission Slot"),
-            ("alpha", "Alpha", "Alpha Slot"),
-            # ("height", "Heightmap", "Heightmap, blender can't do this very well"),
-            ("normal", "NORMAL", "BSDF output for normal map"),
-        ]
+        slots = bake_slots_output
 
         for item in slots:
             layout.operator(PBRBakeTexture.bl_idname, text=item[1]).bake_slot = item[0]
