@@ -984,7 +984,31 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
         ).bake_slot = "normal"
 
 
+class PbrBakeToolsAddonPrefs(bpy.types.AddonPreferences):
+    """
+        Addon Preferences
+    """
+    bl_idname = __name__
 
+    default_texture_size: bpy.props.IntProperty(
+        default = 1024,
+        min = 64,
+        max = 8192
+    )
+
+    default_tile_size: bpy.props.IntProperty(
+        default = 256,
+        min = 16,
+        max = 2048
+    )
+
+
+    def draw(self, context):
+        layout = self.layout
+        col = layout.column()
+
+        col.prop(self, property="default_texture_size", text="Default Texture Size")
+        col.prop(self, property="default_tile_size", text="Default Tile Size (Unstable)")
 
 """
 Tuple for registering classes
@@ -1004,7 +1028,7 @@ registration_classes = (
     PbrBakeBakeMenu,
     PbrBakeConnectToMaterialOutputMenu,
     PbrBakeMenu,
-    
+    PbrBakeToolsAddonPrefs,
     NODE_PT_Bake_Panel_setup,
     NODE_PT_PBR_Bake_Textures,
     NODE_PT_PBR_Bake_Bake,
