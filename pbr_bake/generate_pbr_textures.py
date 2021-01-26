@@ -794,8 +794,9 @@ class PbrBakeMenu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
 
-        layout.menu(PbrBakeConnectMenu.bl_idname)
-        layout.menu(PbrBakeBakeMenu.bl_idname)
+        layout.operator(AddPbrBakeNode.bl_idname, text="Add PBR Bake Node", icon="ADD")
+        layout.menu(PbrBakeConnectMenu.bl_idname, icon="TRIA_RIGHT")
+        layout.menu(PbrBakeBakeMenu.bl_idname, icon="TRIA_RIGHT")
 
 
 class CallPbrBakeMenu(bpy.types.Operator):
