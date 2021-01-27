@@ -671,12 +671,18 @@ class AddPbrBakeNode(bpy.types.Operator):
         mat = context.active_object.material_slots[0].material
         tree = mat.node_tree
 
+        # Grabs the Material Output Nodes position in the node tree
         material_output_node_position = context.active_object.active_material.node_tree.nodes['Material Output'].location
 
+        # adds the PBR Bake Group node to the node tree
         bpy.ops.node.add_node(type="ShaderNodeGroup", use_transform=True, settings=[{"name":"node_tree", "value":"bpy.data.node_groups['PBR_Bake']"}])
 
         active_node = tree.nodes.active
+
+        # Sets the node name to PBR_Bake
         active_node.name = "PBR_Bake"
+
+        # Sets the position of the PBR Bake node relative to the Material Output position
         active_node.location = (material_output_node_position[0] + 800, material_output_node_position[1] + 64)
         return {'FINISHED'}
 
@@ -941,6 +947,9 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         box2 = layout
+
+
+        
 
         box2.label(text="Which to Bake")
 
