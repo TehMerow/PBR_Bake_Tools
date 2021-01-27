@@ -908,7 +908,7 @@ class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
             text="Tile Size"
         )
 
-        box.label(text="Scene Settings")
+        box.label(text="Bake Settings")
 
         row1 = box.row()
 
@@ -1122,16 +1122,16 @@ def init_props():
         name="pbr_bake_image_tile_size",
         min=1,
         max=1024,
-        default = prefs["default_texture_size"],
-        description = "The render tile size,"
+        default = prefs["default_tile_size"],
+        description = "Tile size of the Render"
     )
 
     bpy.types.Scene.pbr_bake_image_size = bpy.props.IntProperty(
         name="pbr_bake_image_size",
         min=32,
         max=2048,
-        default = prefs['default_tile_size'],
-        description = "The render tile size,"
+        default = prefs['default_texture_size'],
+        description = "Texture Size"
     )
 
 addon_keymaps = []
