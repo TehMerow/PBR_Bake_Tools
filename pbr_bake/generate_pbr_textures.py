@@ -707,9 +707,7 @@ class PBRBakeTexture(bpy.types.Operator):
 
 
 class ConnectToBakeNode(bpy.types.Operator):
-    """
-        Connect the selected node to the bake node
-    """
+    """Connect the selected node to the bake node"""
     bl_idname = "node.connect_to_bake_node"
     bl_label  = "Link selected node to bake node"
     bl_options = {"REGISTER", "UNDO"}
@@ -782,45 +780,13 @@ class ConnectToBakeNode(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
-    """Panel for texture creation"""
-    bl_label = "PBR Bake Setup"
-    bl_category = "PBR Bake"
-    bl_space_type = "NODE_EDITOR"
-    bl_region_type = "UI"
-
-    def draw(self, context):
-        layout = self.layout
-
-        box = layout.box()
-        pie = layout.menu_pie()
-        box.label(text="Scene Setup")  
-
-        tile_size = box.prop(
-            bpy.data.scenes['Scene'],
-            'pbr_bake_image_tile_size',
-            text="Tile Size"
-        )
-        box.operator(
-            operator="scene.setup_baking_scene", 
-            text="Setup Baking Scene"
-        ).image_size = context.scene.pbr_bake_image_tile_size
-
-        box.operator(
-            operator = "scene.reset_bake_settings",
-            text = "reset baking scene"
-        )
-
-
-        box.menu(PbrBakeConnectMenu.bl_idname)
 
 
 class PbrBakeConnectMenu(bpy.types.Menu):
-    """
-        popup menu for connecting selected no to bake node
-    """
+    """popup menu for connecting selected node to the bake node
+    Note: Requires a PBR Bake Node in the scene to work"""
     bl_idname = "NODE_MT_pbr_bake_connect_menu"
-    bl_label = "Conected Selected to Bake Slot"
+    bl_label = "Conect Selected Node to Bake Slot"
 
     def draw(self, context):
         type = context.space_data.tree_type
@@ -886,32 +852,71 @@ class CallPbrBakeMenu(bpy.types.Operator):
           return {'FINISHED'}
   
 
-class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
+class NODE_PT_Bake_Panel_setup(bpy.types.Panel):
     """Panel for texture creation"""
-    bl_label = "PBR Bake Textures"
+    bl_label = "Setup"
     bl_category = "PBR Bake"
     bl_space_type = "NODE_EDITOR"
     bl_region_type = "UI"
 
     def draw(self, context):
         layout = self.layout
-        box = layout.box()
-        pie = layout.menu_pie()
 
-        box.label(text="Texture Creators")
+        box = layout
+
+        tile_size = box.prop(
+            bpy.data.scenes['Scene'],
+            'pbr_bake_image_tile_size',
+            text="Tile Size"
+        )
+
+        box.label(text="Scene Settings")
+
+        row1 = box.row()
+
+        row1.operator(
+            operator="scene.setup_baking_scene", 
+            text="Set"
+        ).image_size = context.scene.pbr_bake_image_tile_size
+
+        row1.operator(
+            operator = "scene.reset_bake_settings",
+            text = "Reset"
+        )
+
+
+        box.menu(PbrBakeConnectMenu.bl_idname)
+
+
+
+class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
+    """Panel for texture creation"""
+    bl_label = "Texture and Node Creation"
+    bl_category = "PBR Bake"
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+
+    def draw(self, context):
+        layout = self.layout
+        box = layout
+
+
         box.prop(
             context.scene,
             'pbr_bake_image_size',
             text="Texture Size"
+        
         )
-        box.operator(
+        box.label(text="Generate Textures")
+        row = box.row()
+        row.operator(
             operator = "scene.create_basic_pbr_textures",
-            text = "Create PBR Textures Full"
+            text = "Full"
         ).image_size = context.scene.pbr_bake_image_size
 
-        box.operator(
+        row.operator(
             operator = "scene.create_orm_pbr_textures",
-            text = "Create PBR Textures ORM"
+            text = "ORM"
         ).image_size = context.scene.pbr_bake_image_size
 
         box.operator(
@@ -925,62 +930,70 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
 
 class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
     """Panel containing the bake buttons"""
-    bl_label = "PBR Bake "
+    bl_label = "Bake"
     bl_category = "PBR Bake"
     bl_space_type = "NODE_EDITOR"
     bl_region_type = "UI"
 
     def draw(self, context):
         layout = self.layout
-        box2 = layout.box()
+        box2 = layout
 
-        box2.operator(
+        box2.label(text="Which to Bake")
+
+
+        col_flow = box2.column_flow(columns=2)
+        col1 = col_flow.column()
+        col2 = col_flow.column()
+
+
+        col1.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Base Color"
+            text = "Base Color"
         ).bake_slot = "base_color"
-        box2.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
-            text = "Bake AO"
+            text = "AO"
         ).bake_slot = "ao"
-        box2.operator(
+        col1.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Metalic"
+            text = "Metalic"
         ).bake_slot = "metalic"
-        box2.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
-            text = "Bake ORM"
+            text = "ORM"
         ).bake_slot = "orm"
-        box2.operator(
+        col1.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Specular f0"
+            text = "Specular f0"
         ).bake_slot = "specular"
-        box2.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Rough"
+            text = "Rough"
         ).bake_slot = "rough"
-        box2.operator(
+        col1.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Sheen"
+            text = "Sheen"
         ).bake_slot = "sheen"
-        box2.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Tint"
+            text = "Tint"
         ).bake_slot = "tint"
-        box2.operator(
+        col1.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Clearcoat"
+            text = "Clearcoat"
         ).bake_slot = "clearcoat"
-        box2.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Emission"
+            text = "Emission"
         ).bake_slot = "emit"
-        box2.operator(
+        col1.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Alpha Mask"
+            text = "Alpha Mask"
         ).bake_slot = "alpha"
-        box2.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
-            text = "Bake Normal"
+            text = "Normal"
         ).bake_slot = "normal"
 
 
@@ -1039,7 +1052,15 @@ registration_classes = (
 )
 
 def init_props():
-    prefs = bpy.context.preferences.addons['generate_pbr_textures'].preferences
+    prefs = {
+        "default_texture_size" : 64,
+        "default_tile_size" : 64
+    }
+    if  bpy.context.preferences.addons.get('generate_pbr_textures') is not None:
+        prefs = bpy.context.preferences.addons['generate_pbr_textures'].preferences
+    else:
+        prefs['default_texture_size'] = 1024
+        prefs['default_tile_size'] = 256
     # Scene props for Addon
 
     # Scene prop for tile size
@@ -1047,7 +1068,7 @@ def init_props():
         name="pbr_bake_image_tile_size",
         min=1,
         max=1024,
-        default = prefs.default_texture_size,
+        default = prefs["default_texture_size"],
         description = "The render tile size,"
     )
 
@@ -1055,7 +1076,7 @@ def init_props():
         name="pbr_bake_image_size",
         min=32,
         max=2048,
-        default = prefs.default_tile_size,
+        default = prefs['default_tile_size'],
         description = "The render tile size,"
     )
 
