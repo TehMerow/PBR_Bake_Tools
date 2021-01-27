@@ -803,9 +803,19 @@ class PbrBakeConnectMenu(bpy.types.Menu):
 
         slots = bake_slots_input
 
-        for item in slots:
-            layout.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+        col_flow = layout.column_flow(columns=2)
+        ii = 0
 
+        for item in slots:
+            col1 = col_flow.column()
+            col2 = col_flow.column()
+
+            if ii % 2 == 1:
+                col1.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+            else:
+                col2.operator(ConnectToBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+
+            ii += 1
 
 class PbrBakeBakeMenu(bpy.types.Menu):
 
@@ -818,8 +828,18 @@ class PbrBakeBakeMenu(bpy.types.Menu):
 
         slots = bake_slots_output
 
+        col_flow = layout.column_flow(columns=2)
+        ii = 0
         for item in slots:
-            layout.operator(PBRBakeTexture.bl_idname, text=item[1]).bake_slot = item[0]
+            col1 = col_flow.column()
+            col2= col_flow.column()
+
+            if ii % 2 == 1:
+                col1.operator(PBRBakeTexture.bl_idname, text=item[1]).bake_slot = item[0]
+            else:
+                col1.operator(PBRBakeTexture.bl_idname, text=item[1]).bake_slot = item[0]
+
+            ii += 1
 
 class PbrBakeConnectToMaterialOutputMenu(bpy.types.Menu):
     bl_idname = "NODE_MT_pbr_bake_menu_connect_to_material_output"
@@ -829,9 +849,18 @@ class PbrBakeConnectToMaterialOutputMenu(bpy.types.Menu):
         layout = self.layout
 
         slots = bake_slots_output
+        ii = 0
+        c_flow = layout.column_flow(columns=2)
         for item in slots :
-            layout.operator(LinkSlotsFromBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+            col1 = c_flow.column()
+            col2 = c_flow.column()
 
+            if ii % 2 == 1:
+                col1.operator(LinkSlotsFromBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+            else:
+                col2.operator(LinkSlotsFromBakeNode.bl_idname, text=item[1]).bake_slots = item[0]
+                
+            ii += 1
 
 class PbrBakeMenu(bpy.types.Menu):
     bl_idname = "WM_pbr_bake_menu"
