@@ -514,10 +514,13 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
             link_slot(context, "Clearcoat")
 
         elif self.bake_slots == "clear_rough":
-            link_slot(context, "Clearcoat Rough")
+            link_slot(context, "Clearcoat Roughness")
 
         elif self.bake_slots == "emit":
             link_slot(context, "Emission")
+
+        elif self.bake_slots == "emit_str":
+            link_slot(context, "Emission Strength")
 
         elif self.bake_slots == "alpha":
             link_slot(context, "Alpha")
@@ -1183,7 +1186,7 @@ def init_props():
     bpy.types.Scene.pbr_bake_image_tile_size = bpy.props.IntProperty(
         name="pbr_bake_image_tile_size",
         min=1,
-        max=1024,
+        max=8192,
         default = prefs["default_tile_size"],
         description = "Tile size of the Render, Match this with texture size for faster baking (doing this is more unstable)"
     )
@@ -1192,7 +1195,7 @@ def init_props():
     bpy.types.Scene.pbr_bake_image_size = bpy.props.IntProperty(
         name="pbr_bake_image_size",
         min=32,
-        max=2048,
+        max=8192,
         default = prefs['default_texture_size'],
         description = "Texture Size"
     )
