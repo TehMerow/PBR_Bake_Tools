@@ -22,7 +22,7 @@ The PBR Bake Node has inputs and outputs for most of your PBR needs and will aut
 
 ***
 
-![Side Panel](images/panel.png)
+![Side Panel](images/new_panel.png)
 ![Bake Node](images/bake_node.png)
 
 
@@ -30,7 +30,7 @@ The PBR Bake Node has inputs and outputs for most of your PBR needs and will aut
 
 ***
 
-Press a button and get a full PBR texture layout or an ORM texture layout
+Press a button and get a full PBR texture layout or an ORM texture layout all with their color spaces set appropriately to their texture type
 
 ![Textures](images/textures.webp)
 
@@ -41,6 +41,17 @@ Press a button and get a full PBR texture layout or an ORM texture layout
 Individual buttons for each bake pass so you don't have to navigate a drop down menu
 
 ![Process](images/process.webp)
+
+---
+
+## Connect textures to PBR Bake Node with Ease!
+***New***
+
+With the hotkey menu you can easily connect the textures your want directly to the PBR Bake node
+
+No More Node Wrangler shenanigans
+
+![hotkey_menu_demonstration](images/hotkey_menu_demonstration.webp)
 
 ---
 
@@ -73,7 +84,13 @@ Where these add-ons are not required for this one to work, they are nice to have
 # Gotchas
 
 - This isn't a one button solution but it's something I needed to speed up the process quite a bit
-- right now this only works with **one material per object** if you need more materials per object I'd recommend masking with vertex colors and have multiple shaders withing the material
+
+- right now this only works with **one material per object** if you need more materials per object I'd recommend Vertex color masking with the textures
+
+*Example for using vertex masking to have multiple 'materials' within one node tree*
+
+![vertex masking example](images/vertex_masking_example.png)
+
 - This doesn't cover things like shadow and combined baking but that process is already available in Blender as is
 
 
