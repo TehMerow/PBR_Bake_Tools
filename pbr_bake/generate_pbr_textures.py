@@ -363,7 +363,8 @@ def create_the_stuff():
 
 
 class LinkSlotsFromBakeNodeAndBake(bpy.types.Operator):
-    """Links the slots from the custom node group and bakes"""
+    """Links outputs from the PBR Bake Node to the Material Output Node then bakes that texture
+        Note: Make sure you have the texture you want to bake selected for pressing this button"""
     bl_idname = "node.link_bake_slots_and_bake"
     bl_label = "Links PBR Bake node to material output then bakes"
     bl_options = {'REGISTER', 'UNDO'}
@@ -452,7 +453,7 @@ class LinkSlotsFromBakeNodeAndBake(bpy.types.Operator):
 
 
 class LinkSlotsFromBakeNode(bpy.types.Operator):
-    """Links the slots from the custom node group"""
+    """Links outputs from PBR Bake node to Material Output Node"""
     bl_idname = "node.link_bake_slots"
     bl_label = "Link Output slots from PBR Bake Node to Material Output"
     bl_options = {'REGISTER', 'UNDO'}
@@ -523,7 +524,7 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
 
 
 class SetupBakingScene(bpy.types.Operator):
-    """Sets up the scene for baking PBR Materials"""
+    """Changes render settings to make texture baking faster"""
     bl_idname = "scene.setup_baking_scene"
     bl_label = "Setup Baking Scene"
     bl_options = {'REGISTER', 'UNDO'}
@@ -558,7 +559,7 @@ class SetupBakingScene(bpy.types.Operator):
 
 
 class ResetBakeSettings(bpy.types.Operator):
-    """Aids in resetting the render settings quickly"""
+    """Resets the Render settings to the settings before pressing the "Setup Baking Scene" button """
 
     bl_idname = "scene.reset_bake_settings"
     bl_label = "Reset Baking Scene"
@@ -599,7 +600,7 @@ class ResetBakeSettings(bpy.types.Operator):
 
 
 class CreateBasicMaterialTextures(bpy.types.Operator):
-    """ Creates PBR Textures and adds them to the active Material"""
+    """ Creates PBR Textures (Seperate Occlusion, Roughness and Metalic). Adds them to the active Material"""
     bl_idname = "scene.create_basic_pbr_textures"
     bl_label = "Create PBR Textures"
     bl_options = {"REGISTER", "UNDO"}
@@ -628,7 +629,7 @@ class CreateBasicMaterialTextures(bpy.types.Operator):
 
 
 class CreateORMMaterialTextures(bpy.types.Operator):
-    """ Creates PBR Textures and adds them to the active Material"""
+    """ Creates PBR Textures with an ORM(Occlusion, Roughness, Metalic) in place of invividual for each. Adds them to the active Material"""
     bl_idname = "scene.create_orm_pbr_textures"
     bl_label = "Create PBR Textures"
     bl_options = {"REGISTER", "UNDO"}
@@ -653,7 +654,8 @@ class CreateORMMaterialTextures(bpy.types.Operator):
 
 
 class AddPbrBakeNode(bpy.types.Operator):
-    """adds the bake node to the current node tree"""
+    """Adds the bake node to the current node tree
+        Note: This node is crucial for this add-on to work"""
     bl_idname = "node.add_bake_node"
     bl_label = "Adds the bake node to the node tree"
     bl_options = {"REGISTER", "UNDO"}
@@ -680,7 +682,8 @@ class AddPbrBakeNode(bpy.types.Operator):
 
 
 class PBRBakeTexture(bpy.types.Operator):
-    """links and bakes the texture"""
+    """Links the corresponding output from the PBR Bake node to the material Output node then bakes.
+        Note: Make sure you have the texture you want to bake selected before running this command"""
     bl_idname = "node.bake_current_texture"
     bl_label = "link and bake"
     bl_options = {"REGISTER", "UNDO"}
