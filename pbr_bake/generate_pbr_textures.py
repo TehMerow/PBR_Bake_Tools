@@ -69,6 +69,7 @@ bake_slots_input = [
     ("clearcoat", "Clearcoat", "Clearcoat Slot"),
     ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
     ("emit", "Emission", "Emission Slot"),
+    ("emit_str", "Emission Strength", "Emission Strength Slot"),
     ("alpha", "Alpha", "Alpha Slot"),
     ("transmission", "Transmission", "Transmision slot"),
     ("transmission_rough", "Transmission Roughness", "Transmission Roughness Slot"),
@@ -87,6 +88,7 @@ bake_slots_output =  [
     ("clearcoat", "Clearcoat", "Clearcoat Slot"),
     ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
     ("emit", "Emission", "Emission Slot"),
+    ("emit_str", "Emission Strength", "Emission Strength Slot"),
     ("alpha", "Alpha", "Alpha Slot"),
     ("transmission", "Transmission", "Transmision slot"),
     ("transmission_rough", "Transmission Roughness", "Transmission Roughness Slot"),
@@ -285,6 +287,7 @@ def create_the_stuff():
         ("Clearcoat", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", 0.0),
         ("Clearcoat Roughness", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", 0.2),
         ("Emission", "NodeSocketColor", "NodeSocketShader", "ShaderNodeEmission",(0.0,0.0,0.0,1.0)),
+        ("Emission Strength", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission",.0),
         ("Alpha", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", 1.0),
         ("Transmission", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
         ("Transmission Roughness", "NodeSocketFloat", "NodeSocketShader", "ShaderNodeEmission", .0),
@@ -305,8 +308,10 @@ def create_the_stuff():
 
 
     # create emission nodes
-    def create_emit_node(type, pos):
+    def create_emit_node(type, pos, name):
         node_emit = pbr_bake_group.nodes.new(type)
+        node_emit.name = name
+        node_emit.label = name
         node_emit.location = (100, pos)
 
         return node_emit
@@ -326,7 +331,7 @@ def create_the_stuff():
         pbr_bake_group.outputs.new("NodeSocketShader", "ORM")
 
         # create emit node
-        emit_node = create_emit_node("ShaderNodeEmission", -1500)
+        emit_node = create_emit_node("ShaderNodeEmission", -1500, "ORM")
 
         # create combine rgb node
         node_combine_rgb = pbr_bake_group.nodes.new("ShaderNodeCombineRGB")
@@ -340,17 +345,17 @@ def create_the_stuff():
         # Connect combinergb node to emission node
         # then connect emmision node to output
         pbr_bake_group.links.new(node_combine_rgb.outputs[0], emit_node.inputs[0])
-        pbr_bake_group.links.new(emit_node.outputs[0], group_outputs.inputs[15])
+        pbr_bake_group.links.new(emit_node.outputs[0], group_outputs.inputs[16])
 
     create_orm()
 
     # itterate through all the sockets and link them together
     # with an emmision node
     def create_slots_and_make_links():
-        offset = 0
+        offset = 1000
         for nodes in io:
-            node = create_emit_node(nodes[3], offset)
-            offset -= 100
+            node = create_emit_node(nodes[3], offset, nodes[0])
+            offset -= 200
 
             if nodes[0] == "Normal":
                 
@@ -784,9 +789,18 @@ class ConnectToBakeNode(bpy.types.Operator):
 
         elif self.bake_slots == "emit":
             link_to_bake_node(context, "Emission")
+        
+        elif self.bake_slots == "emit_str":
+            link_to_bake_node(context, "Emission Strength")
 
         elif self.bake_slots == "alpha":
             link_to_bake_node(context, "Alpha")
+        
+        elif self.bake_slots == "transmission":
+            link_to_bake_node(context, "Transmission")
+        
+        elif self.bake_slots == "transmission_rough":
+            link_to_bake_node(context, "Transmission Roughness")
 
         elif self.bake_slots == "orm":
             link_to_bake_node(context, "ORM")
@@ -1036,21 +1050,25 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
         ).bake_slot = "emit"
         col1.operator(
             operator = "node.bake_current_texture",
+            text = "Emission Strength"
+        ).bake_slot = "emit_str"
+        col2.operator(
+            operator = "node.bake_current_texture",
             text = "Alpha Mask"
         ).bake_slot = "alpha"
-        col2.operator(
+        col1.operator(
             operator = "node.bake_current_texture",
             text = "Transmission"
         ).bake_slot = "transmission"
-        col1.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
             text = "Transmission Roughness"
         ).bake_slot = "transmission_rough"
-        col2.operator(
+        col1.operator(
             operator = "node.bake_current_texture",
             text = "Heightmap"
         ).bake_slot = "height"
-        col1.operator(
+        col2.operator(
             operator = "node.bake_current_texture",
             text = "Normal"
         ).bake_slot = "normal"
