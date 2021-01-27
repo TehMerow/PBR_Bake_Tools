@@ -70,6 +70,8 @@ bake_slots_input = [
     ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
     ("emit", "Emission", "Emission Slot"),
     ("alpha", "Alpha", "Alpha Slot"),
+    ("transmission", "Transmission", "Transmision slot"),
+    ("transmission_rough", "Transmission Roughness", "Transmission Roughness Slot"),
     ("height", "Heightmap", "Heightmap, blender can't do this very well"),
     ("normal", "NORMAL", "BSDF output for normal map"),
 ]
@@ -86,6 +88,8 @@ bake_slots_output =  [
     ("clear_rough", "Clearcoat Roughness", "Clearcoat Roughness slot"),
     ("emit", "Emission", "Emission Slot"),
     ("alpha", "Alpha", "Alpha Slot"),
+    ("transmission", "Transmission", "Transmision slot"),
+    ("transmission_rough", "Transmission Roughness", "Transmission Roughness Slot"),
     ("orm", "ORM", "ORM slot. Red Channel = Occlusion, Green Channel = Roughness, Blue channel = Metalness"),
     ("height", "Heightmap", "Heightmap, blender can't do this very well"),
     ("normal", "NORMAL", "BSDF output for normal map"),
@@ -513,6 +517,12 @@ class LinkSlotsFromBakeNode(bpy.types.Operator):
 
         elif self.bake_slots == "orm":
             link_slot(context, "ORM")
+
+        elif self.bake_slots == "transmission":
+            link_slot(context, "Transmission")
+
+        elif self.bake_slots == "transmission_rough":
+            link_slot(context, "Transmission Roughness")
 
         elif self.bake_slots == "height":
             link_slot(context, "Heightmap")
@@ -963,9 +973,6 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
         )
 
 
-
-
-
 class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
     """Panel containing the bake buttons"""
     bl_label = "Bake"
@@ -1032,6 +1039,18 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
             text = "Alpha Mask"
         ).bake_slot = "alpha"
         col2.operator(
+            operator = "node.bake_current_texture",
+            text = "Transmission"
+        ).bake_slot = "transmission"
+        col1.operator(
+            operator = "node.bake_current_texture",
+            text = "Transmission Roughness"
+        ).bake_slot = "transmission_rough"
+        col2.operator(
+            operator = "node.bake_current_texture",
+            text = "Heightmap"
+        ).bake_slot = "height"
+        col1.operator(
             operator = "node.bake_current_texture",
             text = "Normal"
         ).bake_slot = "normal"
