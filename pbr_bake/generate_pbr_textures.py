@@ -718,12 +718,16 @@ class PBRBakeTexture(bpy.types.Operator):
         return context
 
     def execute(self, context):
+        # Baking Slot variable
         slt = ""
 
+        # Checks to see if the bake slot is type of 'normal'
+        # To change the output baking mode
         if  self.bake_slot == "normal":
             slt = "NORMAL"
         else:
             slt = "EMIT"
+        
         bpy.ops.node.link_bake_slots(bake_slots=self.bake_slot)
         bpy.ops.object.bake(type=slt)
         

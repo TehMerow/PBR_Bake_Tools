@@ -26,7 +26,7 @@ The PBR Bake Node has inputs and outputs for most of your PBR needs and will aut
 ![Bake Node](images/bake_node.png)
 
 
-## Add Textures with a single button
+## Add Textures with a Single Button
 
 ***
 
@@ -36,7 +36,7 @@ Press a button and get a full PBR texture layout or an ORM texture layout all wi
 
 ***
 
-## Bake Textures with a single button
+## Bake Textures with a Single Button
 
 Individual buttons for each bake pass so you don't have to navigate a drop down menu
 
@@ -44,7 +44,7 @@ Individual buttons for each bake pass so you don't have to navigate a drop down 
 
 ---
 
-## Connect textures to PBR Bake Node with Ease!
+## Connect Textures to PBR Bake Node with Ease!
 ***New***
 
 With the hotkey menu you can easily connect the textures your want directly to the PBR Bake node
