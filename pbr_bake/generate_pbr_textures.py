@@ -949,7 +949,6 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
         box2 = layout
 
 
-        
 
         box2.label(text="Which to Bake")
 
@@ -1009,6 +1008,19 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
         ).bake_slot = "normal"
 
 
+class NODE_PT_Bake_Panel_misc(bpy.types.Panel):
+    bl_label="Misc"
+    bl_category = "PBR Bake"
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+
+    def draw(self, context):
+        layout = self.layout
+
+        layout.menu(PbrBakeConnectToMaterialOutputMenu.bl_idname)
+        
+
+
 class PbrBakeToolsAddonPrefs(bpy.types.AddonPreferences):
     """
         Addon Preferences
@@ -1061,6 +1073,7 @@ registration_classes = (
     NODE_PT_Bake_Panel_setup,
     NODE_PT_PBR_Bake_Textures,
     NODE_PT_PBR_Bake_Bake,
+    NODE_PT_Bake_Panel_misc ,
 )
 
 def init_props():
