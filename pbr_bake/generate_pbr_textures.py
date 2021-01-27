@@ -55,6 +55,8 @@ render_settings_pre_bake_scene_setup = {
         'x' : 16,
         'y' : 16
     },
+    "bake_margin" : 8,
+    "clear_image" : True
 }
 
 
@@ -557,6 +559,19 @@ class SetupBakingScene(bpy.types.Operator):
         default = False
     )
 
+    bake_margin: bpy.props.IntProperty(
+        name = "Bake Margin",
+        description = "",
+        default = 16,
+        min=0,
+        max = 256,
+    )
+
+    clear_image: bpy.props.BoolProperty(
+        name = "Clear Image",
+        default = True
+    )
+
     @classmethod
     def poll(cls, context):
         return context
@@ -568,7 +583,8 @@ class SetupBakingScene(bpy.types.Operator):
         
         scene.render.bake.use_selected_to_active = self.selected_to_active
         scene.render.bake.cage_extrusion = 0.1
-        scene.render.bake.margin = 8
+        scene.render.bake.margin = self.bake_margin
+        scene.render.bake.use_clear = self.clear_image
 
         return {"FINISHED"}
 
@@ -973,6 +989,8 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
             text="Texture Size"
         
         )
+        
+
         box.label(text="Generate Textures")
         row = box.row()
         row.operator(
@@ -989,6 +1007,7 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
             operator = "node.add_bake_node",
             text = "Add Bake Node"
         )
+
 
 
 class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
@@ -1149,7 +1168,9 @@ registration_classes = (
 def init_props():
     prefs = {
         "default_texture_size" : 64,
-        "default_tile_size" : 64
+        "default_tile_size" : 64,
+        "bake_margin" : 8,
+        "clear_image" : True
     }
     if  bpy.context.preferences.addons.get('generate_pbr_textures') is not None:
         prefs = bpy.context.preferences.addons['generate_pbr_textures'].preferences
@@ -1164,15 +1185,33 @@ def init_props():
         min=1,
         max=1024,
         default = prefs["default_tile_size"],
-        description = "Tile size of the Render"
+        description = "Tile size of the Render, Match this with texture size for faster baking (doing this is more unstable)"
     )
 
+    # Scene prop for image size
     bpy.types.Scene.pbr_bake_image_size = bpy.props.IntProperty(
         name="pbr_bake_image_size",
         min=32,
         max=2048,
         default = prefs['default_texture_size'],
         description = "Texture Size"
+    )
+
+    # scene prop for baking margin
+
+    bpy.types.Scene.pbr_bake_bake_margin = bpy.props.IntProperty(
+        name="pbr_bake_bake_margin",
+        min = 0,
+        max=256,
+        default = prefs['bake_margin'],
+        description = "Bake Margin",
+
+    )
+    bpy.types.Scene.pbr_bake_clear_image = bpy.props.IntProperty(
+        name="pbr_bake_bake_clear_image",
+        default = prefs['clear_image'],
+        description = "Clear Image",
+
     )
 
 addon_keymaps = []
