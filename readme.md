@@ -22,9 +22,7 @@ The PBR Bake Node has inputs and outputs for most of your PBR needs and will aut
 
 ***
 
-![Side Panel](images/new_panel.png)
-![Bake Node](images/bake_node.png)
-
+![side panel and pbr bake node](images/panel_and_bake_node.png)
 
 ## Add Textures with a Single Button
 
@@ -32,7 +30,8 @@ The PBR Bake Node has inputs and outputs for most of your PBR needs and will aut
 
 Press a button and get a full PBR texture layout or an ORM texture layout all with their color spaces set appropriately to their texture type
 
-![Textures](images/textures.webp)
+![Textures](images/video/create_textures.webp)
+
 
 ***
 
@@ -40,7 +39,7 @@ Press a button and get a full PBR texture layout or an ORM texture layout all wi
 
 Individual buttons for each bake pass so you don't have to navigate a drop down menu
 
-![Process](images/process.webp)
+![Process](images/video/autobake.webp)
 
 ---
 
