@@ -100,6 +100,6 @@ Where these add-ons are not required for this one to work, they are nice to have
 
 ---
 
-## If you like What I do and make, consider supporting me on ko-fi
+## If you like What I do, consider supporting me on ko-fi
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z31DUBF)
