@@ -1,4 +1,4 @@
-# A Blender add-on that aids in the creation of PBR Texture baking
+# A Blender Add-On that Aids in the Creation of PBR Texture Baking
 
 A simple solution for speeding up the process of PBR Texture baking
 
