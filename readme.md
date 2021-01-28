@@ -80,6 +80,7 @@ Where these add-ons are not required for this one to work, they are nice to have
 
 [Node Wrangler *(Blender Built-in add-on)*](https://docs.blender.org/manual/en/latest/addons/node/node_wrangler.html) ➡ Just good to have on  
 
+
 # Gotchas
 
 - This isn't a one button solution but it's something I needed to speed up the process quite a bit
@@ -93,4 +94,6 @@ Where these add-ons are not required for this one to work, they are nice to have
 - This doesn't cover things like shadow and combined baking but that process is already available in Blender as is
 
 
+# This addon is also available on [Itch.io](https://tehmerow.itch.io/pbr-bake-tools)
 
+[![On Itch.io](images/misc/itch.io_badge.svg)](https://tehmerow.itch.io/pbr-bake-tools)
