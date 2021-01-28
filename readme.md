@@ -97,3 +97,9 @@ Where these add-ons are not required for this one to work, they are nice to have
 # This addon is also available on [Itch.io](https://tehmerow.itch.io/pbr-bake-tools)
 
 [![On Itch.io](images/misc/itch.io_badge.svg)](https://tehmerow.itch.io/pbr-bake-tools)
+
+---
+
+## If you like What I do and make, consider supporting me on ko-fi
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z31DUBF)
