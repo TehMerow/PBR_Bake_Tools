@@ -1175,11 +1175,14 @@ def init_props():
         "bake_margin" : 8,
         "clear_image" : True
     }
-    if  bpy.context.preferences.addons.get('generate_pbr_textures') is not None:
-        prefs = bpy.context.preferences.addons['generate_pbr_textures'].preferences
-    else:
-        prefs['default_texture_size'] = 1024
-        prefs['default_tile_size'] = 256
+    # if  bpy.context.preferences.addons.get('generate_pbr_textures') is not None:
+    #     prefs = bpy.context.preferences.addons['generate_pbr_textures'].preferences
+    # else:
+    #     prefs['default_texture_size'] = 1024
+    #     prefs['default_tile_size'] = 256
+    
+    prefs['default_texture_size'] = 1024
+    prefs['default_tile_size'] = 256
     # Scene props for Addon
 
     # Scene prop for tile size
