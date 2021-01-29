@@ -635,7 +635,7 @@ class ResetBakeSettings(bpy.types.Operator):
 
 class CreateBasicMaterialTextures(bpy.types.Operator):
     """ Creates PBR Textures (Seperate Occlusion, Roughness and Metalic). Adds them to the active Material"""
-    bl_idname = "scene.create_basic_pbr_textures"
+    bl_idname = "node.create_basic_pbr_textures"
     bl_label = "Create PBR Textures"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -664,7 +664,7 @@ class CreateBasicMaterialTextures(bpy.types.Operator):
 
 class CreateORMMaterialTextures(bpy.types.Operator):
     """ Creates PBR Textures with an ORM(Occlusion, Roughness, Metalic) in place of invividual for each. Adds them to the active Material"""
-    bl_idname = "scene.create_orm_pbr_textures"
+    bl_idname = "node.pbr_bake_create_orm_pbr_textures"
     bl_label = "Create PBR Textures"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -690,7 +690,7 @@ class CreateORMMaterialTextures(bpy.types.Operator):
 class AddPbrBakeNode(bpy.types.Operator):
     """Adds the bake node to the current node tree
         Note: This node is crucial for this add-on to work"""
-    bl_idname = "node.add_bake_node"
+    bl_idname = "node.pbr_bake_add_bake_node"
     bl_label = "Adds the bake node to the node tree"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -724,7 +724,7 @@ class AddPbrBakeNode(bpy.types.Operator):
 class PBRBakeTexture(bpy.types.Operator):
     """Links the corresponding output from the PBR Bake node to the material Output node then bakes.
         Note: Make sure you have the texture you want to bake selected before running this command"""
-    bl_idname = "node.bake_current_texture"
+    bl_idname = "node.pbr_bake_bake_current_texture"
     bl_label = "link and bake"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -755,7 +755,7 @@ class PBRBakeTexture(bpy.types.Operator):
 
 class ConnectToBakeNode(bpy.types.Operator):
     """Connect the selected node to the bake node"""
-    bl_idname = "node.connect_to_bake_node"
+    bl_idname = "node.pbr_bake_connect_to_bake_node"
     bl_label  = "Link selected node to bake node"
     bl_options = {"REGISTER", "UNDO"}
 
