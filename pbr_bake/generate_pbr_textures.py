@@ -997,17 +997,17 @@ class NODE_PT_PBR_Bake_Textures(bpy.types.Panel):
         box.label(text="Generate Textures")
         row = box.row()
         row.operator(
-            operator = "scene.create_basic_pbr_textures",
+            operator = CreateBasicMaterialTextures.bl_idname,
             text = "Full"
         ).image_size = context.scene.pbr_bake_image_size
 
         row.operator(
-            operator = "scene.create_orm_pbr_textures",
+            operator = CreateORMMaterialTextures.bl_idname,
             text = "ORM"
         ).image_size = context.scene.pbr_bake_image_size
 
         box.operator(
-            operator = "node.add_bake_node",
+            operator = AddPbrBakeNode.bl_idname,
             text = "Add Bake Node"
         )
 
@@ -1035,67 +1035,67 @@ class NODE_PT_PBR_Bake_Bake(bpy.types.Panel):
 
 
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Base Color"
         ).bake_slot = "base_color"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "AO"
         ).bake_slot = "ao"
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Metalic"
         ).bake_slot = "metalic"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "ORM"
         ).bake_slot = "orm"
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Specular f0"
         ).bake_slot = "specular"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Rough"
         ).bake_slot = "rough"
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Sheen"
         ).bake_slot = "sheen"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Tint"
         ).bake_slot = "tint"
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Clearcoat"
         ).bake_slot = "clearcoat"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Emission"
         ).bake_slot = "emit"
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Emission Strength"
         ).bake_slot = "emit_str"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Alpha Mask"
         ).bake_slot = "alpha"
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Transmission"
         ).bake_slot = "transmission"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Transmission Roughness"
         ).bake_slot = "transmission_rough"
         col1.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Heightmap"
         ).bake_slot = "height"
         col2.operator(
-            operator = "node.bake_current_texture",
+            operator = PBRBakeTexture.bl_idname,
             text = "Normal"
         ).bake_slot = "normal"
 
