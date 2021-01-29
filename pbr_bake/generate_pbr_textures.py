@@ -910,7 +910,7 @@ class PbrBakeConnectToMaterialOutputMenu(bpy.types.Menu):
             ii += 1
 
 class PbrBakeMenu(bpy.types.Menu):
-    bl_idname = "WM_pbr_bake_menu"
+    bl_idname = "NODE_MT_pbr_bake_menu"
     bl_label = "PBR Bake Menu"
 
     def draw(self, context):
