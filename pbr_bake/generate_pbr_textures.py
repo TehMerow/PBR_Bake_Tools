@@ -235,7 +235,7 @@ def _set_bake_settings(context, texture_size):
 # so that the link_slot function has access to it
 def get_bake_node(ctx):
     obj = bpy.context.active_object
-    mat = obj.material_slots[0].material
+    mat = obj.active_material
     nodes = mat.node_tree.nodes["PBR_Bake"]
     mat_output = mat.node_tree.nodes["Material Output"]
 
