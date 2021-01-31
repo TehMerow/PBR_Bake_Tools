@@ -702,14 +702,14 @@ class AddPbrBakeNode(bpy.types.Operator):
         if bpy.data.node_groups.find("PBR_Bake") == -1:
             create_the_stuff()
 
-        mat = context.active_object.material_slots[0].material
+        mat = context.active_object.active_material
         tree = mat.node_tree
 
         # Grabs the Material Output Nodes position in the node tree
         material_output_node_position = context.active_object.active_material.node_tree.nodes['Material Output'].location
 
         # adds the PBR Bake Group node to the node tree
-        bpy.ops.node.add_node(type="ShaderNodeGroup", use_transform=True, settings=[{"name":"node_tree", "value":"bpy.data.node_groups['PBR_Bake']"}])
+        bake_node = bpy.ops.node.add_node(type="ShaderNodeGroup", use_transform=True, settings=[{"name":"node_tree", "value":"bpy.data.node_groups['PBR_Bake']"}])
 
         active_node = tree.nodes.active
 
