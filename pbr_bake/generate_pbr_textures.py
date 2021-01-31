@@ -769,7 +769,7 @@ class ConnectToBakeNode(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         valid = False
-        if context.active_object.material_slots['Material'].material.node_tree.nodes['PBR_Bake'] is not None:
+        if context.active_object.active_material.node_tree.nodes['PBR_Bake'] is not None:
             valid = True
 
         return valid
