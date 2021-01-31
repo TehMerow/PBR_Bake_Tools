@@ -35,7 +35,7 @@ image_names_full = [
     {"name": "base_color", "colorspace": COLOR_SPACE_SRGB},
     {"name": "ambient_occlusion", "colorspace": COLOR_SPACE_SRGB},
     {"name": "specular", "colorspace": COLOR_SPACE_NON_COLOR},
-    {"name": "metalness", "colorspace": COLOR_SPACE_NON_COLOR},
+    {"name": "metalic", "colorspace": COLOR_SPACE_NON_COLOR},
     {"name": "roughness", "colorspace": COLOR_SPACE_NON_COLOR},
     {"name": "normal", "colorspace": COLOR_SPACE_NON_COLOR},
     {"name": "height", "colorspace": COLOR_SPACE_NON_COLOR},
@@ -63,7 +63,7 @@ render_settings_pre_bake_scene_setup = {
 bake_slots_input = [
     ("base_color", "Base Color", "The Base color or Albedo"),
     ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
-    ("metalic", "Metalness", "The Metalness Slot"),
+    ("metalic", "Metalic", "The Metalic Slot"),
     ("specular", "Specular", "Specular F0 Slot"),
     ("rough", "Roughness", "Roughness slot"),
     ("sheen", "Sheen", "Sheen slot"),
@@ -82,7 +82,7 @@ bake_slots_input = [
 bake_slots_output =  [
     ("base_color", "Base Color", "The Base color or Albedo"),
     ("ao", "Ambient Occlusion", "The Ambient Occlusion"),
-    ("metalic", "Metalness", "The Metalness Slot"),
+    ("metalic", "Metalic", "The Metalic Slot"),
     ("specular", "Specular", "Specular F0 Slot"),
     ("rough", "Roughness", "Roughness slot"),
     ("sheen", "Sheen", "Sheen slot"),
@@ -94,7 +94,7 @@ bake_slots_output =  [
     ("alpha", "Alpha", "Alpha Slot"),
     ("transmission", "Transmission", "Transmision slot"),
     ("transmission_rough", "Transmission Roughness", "Transmission Roughness Slot"),
-    ("orm", "ORM", "ORM slot. Red Channel = Occlusion, Green Channel = Roughness, Blue channel = Metalness"),
+    ("orm", "ORM", "ORM slot. Red Channel = Occlusion, Green Channel = Roughness, Blue channel = Metalic"),
     ("height", "Heightmap", "Heightmap, blender can't do this very well"),
     ("normal", "NORMAL", "BSDF output for normal map"),
 ]
@@ -162,7 +162,7 @@ def reorder_images(context, pbr_type):
     image_order = list()
 
     if pbr_type == 'DEFAULT':
-        image_order = [1, 0, 6, 5, 4, 2]
+        image_order = [1, 0,3, 6, 5, 4, 2]
     elif pbr_type == 'ORM':
         image_order = [0, 4, 3, 2, 1]
         pass
