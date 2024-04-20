@@ -1,3 +1,6 @@
+
+This addon is doo doo and I've since started using [TexTools for Blender instead](https://github.com/franMarz/TexTools-Blender) (it's way better than anything I could make) so this repository is now closed
+
 # A Blender Add-On that Aids in the Creation of PBR Texture Baking
 
 A simple solution for speeding up the process of PBR Texture baking
